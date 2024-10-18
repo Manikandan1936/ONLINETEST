@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Mutlipel_Choice_QuestionModelStoreContainer" CdmEntityContainer="Mutlipel_Choice_QuestionEntities1">
+    <EntitySetMapping Name="Admin_Table">
+      <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Admin_Table">
+        <MappingFragment StoreEntitySet="Admin_Table">
+          <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
+          <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="login_Date" ColumnName="login_Date" />
+          <ScalarProperty Name="last_Login_date" ColumnName="last_Login_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Login_Admin" FunctionName="Mutlipel_Choice_QuestionModel.Store.Login_Admin">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Login_Admin_Result">
+          <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
+          <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="login_Date" ColumnName="login_Date" />
+          <ScalarProperty Name="last_Login_date" ColumnName="last_Login_date" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="Subject_Table">
+      <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Subject_Table">
+        <MappingFragment StoreEntitySet="Subject_Table">
+          <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Subject_Id" ColumnName="Subject_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="save_subject" FunctionName="Mutlipel_Choice_QuestionModel.Store.save_subject" />
+    <FunctionImportMapping FunctionImportName="show_subjects" FunctionName="Mutlipel_Choice_QuestionModel.Store.show_subjects">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Mutlipel_Choice_QuestionModel.show_subjects_Result">
+          <ScalarProperty Name="Subject_Id" ColumnName="Subject_Id" />
+          <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+          <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Subjects_Dropdown" FunctionName="Mutlipel_Choice_QuestionModel.Store.Subjects_Dropdown" />
+    <EntitySetMapping Name="Option_Table">
+      <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Option_Table">
+        <MappingFragment StoreEntitySet="Option_Table">
+          <ScalarProperty Name="Is_Correct" ColumnName="Is_Correct" />
+          <ScalarProperty Name="Option_Text" ColumnName="Option_Text" />
+          <ScalarProperty Name="Options" ColumnName="Options" />
+          <ScalarProperty Name="Question_Id" ColumnName="Question_Id" />
+          <ScalarProperty Name="Option_Id" ColumnName="Option_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Question_Table">
+      <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Question_Table">
+        <MappingFragment StoreEntitySet="Question_Table">
+          <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+          <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+          <ScalarProperty Name="Questions" ColumnName="Questions" />
+          <ScalarProperty Name="Question_Id" ColumnName="Question_Id" />
+          <ScalarProperty Name="Subject_Id" ColumnName="Subject_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Test_Table">
+      <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Test_Table">
+        <MappingFragment StoreEntitySet="Test_Table">
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+          <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+          <ScalarProperty Name="Test_Name" ColumnName="Test_Name" />
+          <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

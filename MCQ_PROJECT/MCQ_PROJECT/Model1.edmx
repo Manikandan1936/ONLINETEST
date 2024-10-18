@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Mutlipel_Choice_QuestionModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="Mutlipel_Choice_QuestionModelStoreContainer">
+          <EntitySet Name="Admin_Table" EntityType="Mutlipel_Choice_QuestionModel.Store.Admin_Table" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Option_Table" EntityType="Mutlipel_Choice_QuestionModel.Store.Option_Table" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Question_Table" EntityType="Mutlipel_Choice_QuestionModel.Store.Question_Table" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Subject_Table" EntityType="Mutlipel_Choice_QuestionModel.Store.Subject_Table" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Test_Table" EntityType="Mutlipel_Choice_QuestionModel.Store.Test_Table" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="Admin_Table">
+          <Key>
+            <PropertyRef Name="Admin_Id" />
+          </Key>
+          <Property Name="Admin_Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Email_Id" Type="varchar" MaxLength="50" />
+          <Property Name="User_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="10" />
+          <Property Name="Mobile_Number" Type="varchar" MaxLength="10" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="login_Date" Type="datetime" />
+          <Property Name="last_Login_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Option_Table">
+          <Key>
+            <PropertyRef Name="Option_Id" />
+          </Key>
+          <Property Name="Option_Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Question_Id" Type="int" />
+          <Property Name="Options" Type="varchar" MaxLength="10" />
+          <Property Name="Option_Text" Type="varchar" MaxLength="50" />
+          <Property Name="Is_Correct" Type="bit" />
+        </EntityType>
+        <EntityType Name="Question_Table">
+          <Key>
+            <PropertyRef Name="Question_Id" />
+          </Key>
+          <Property Name="Subject_Id" Type="int" />
+          <Property Name="Question_Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Questions" Type="varchar" MaxLength="500" />
+          <Property Name="Created_By" Type="int" />
+          <Property Name="Created_Date" Type="date" />
+        </EntityType>
+        <EntityType Name="Subject_Table">
+          <Key>
+            <PropertyRef Name="Subject_Id" />
+          </Key>
+          <Property Name="Subject_Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Subjects" Type="varchar" MaxLength="400" />
+          <Property Name="Created_By" Type="int" />
+        </EntityType>
+        <EntityType Name="Test_Table">
+          <Key>
+            <PropertyRef Name="Test_Id" />
+          </Key>
+          <Property Name="Test_Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Test_Name" Type="varchar" MaxLength="500" />
+          <Property Name="Created_Date" Type="datetime" />
+          <Property Name="End_Date" Type="datetime" />
+          <Property Name="Duration" Type="time" />
+        </EntityType>
+        <Function Name="Login_Admin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="user_name" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="save_subject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="subjects" Type="varchar" Mode="In" />
+          <Parameter Name="created_by" Type="int" Mode="In" />
+        </Function>
+        <Function Name="show_subjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Subjects_Dropdown" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="subject_id" Type="int" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Mutlipel_Choice_QuestionModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Mutlipel_Choice_QuestionEntities1" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Admin_Table" EntityType="Mutlipel_Choice_QuestionModel.Admin_Table" />
+          <FunctionImport Name="Login_Admin" ReturnType="Collection(Mutlipel_Choice_QuestionModel.Login_Admin_Result)">
+            <Parameter Name="user_name" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Subject_Table" EntityType="Mutlipel_Choice_QuestionModel.Subject_Table" />
+          <FunctionImport Name="save_subject">
+            <Parameter Name="subjects" Mode="In" Type="String" />
+            <Parameter Name="created_by" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="show_subjects" ReturnType="Collection(Mutlipel_Choice_QuestionModel.show_subjects_Result)" />
+          <FunctionImport Name="Subjects_Dropdown" ReturnType="Collection(String)">
+          <Parameter Name="subject_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Option_Table" EntityType="Mutlipel_Choice_QuestionModel.Option_Table" />
+          <EntitySet Name="Question_Table" EntityType="Mutlipel_Choice_QuestionModel.Question_Table" />
+          <EntitySet Name="Test_Table" EntityType="Mutlipel_Choice_QuestionModel.Test_Table" />
+        </EntityContainer>
+        <EntityType Name="Admin_Table">
+          <Key>
+            <PropertyRef Name="Admin_Id" />
+          </Key>
+          <Property Name="Admin_Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Email_Id" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="User_Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Mobile_Number" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="login_Date" Type="DateTime" Precision="3" />
+          <Property Name="last_Login_date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="Login_Admin_Result">
+          <Property Type="Int32" Name="Admin_Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email_Id" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="User_Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Mobile_Number" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="login_Date" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="last_Login_date" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="Subject_Table">
+          <Key>
+            <PropertyRef Name="Subject_Id" />
+          </Key>
+          <Property Type="Int32" Name="Subject_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Subjects" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Created_By" />
+        </EntityType>
+        <ComplexType Name="show_subjects_Result">
+          <Property Type="Int32" Name="Subject_Id" Nullable="false" />
+          <Property Type="String" Name="Subjects" Nullable="true" MaxLength="400" />
+          <Property Type="Int32" Name="Created_By" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Option_Table">
+          <Key>
+            <PropertyRef Name="Option_Id" />
+          </Key>
+          <Property Type="Int32" Name="Option_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Question_Id" />
+          <Property Type="String" Name="Options" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Option_Text" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Is_Correct" />
+        </EntityType>
+        <EntityType Name="Question_Table">
+          <Key>
+            <PropertyRef Name="Question_Id" />
+          </Key>
+          <Property Type="Int32" Name="Subject_Id" />
+          <Property Type="Int32" Name="Question_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Questions" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Created_By" />
+          <Property Type="DateTime" Name="Created_Date" Precision="0" />
+        </EntityType>
+        <EntityType Name="Test_Table">
+          <Key>
+            <PropertyRef Name="Test_Id" />
+          </Key>
+          <Property Type="Int32" Name="Test_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Test_Name" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Created_Date" Precision="3" />
+          <Property Type="DateTime" Name="End_Date" Precision="3" />
+          <Property Type="Time" Name="Duration" Precision="7" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Mutlipel_Choice_QuestionModelStoreContainer" CdmEntityContainer="Mutlipel_Choice_QuestionEntities1">
+          <EntitySetMapping Name="Admin_Table">
+            <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Admin_Table">
+              <MappingFragment StoreEntitySet="Admin_Table">
+                <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
+                <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="login_Date" ColumnName="login_Date" />
+                <ScalarProperty Name="last_Login_date" ColumnName="last_Login_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Login_Admin" FunctionName="Mutlipel_Choice_QuestionModel.Store.Login_Admin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Login_Admin_Result">
+                <ScalarProperty Name="Admin_Id" ColumnName="Admin_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email_Id" ColumnName="Email_Id" />
+                <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Mobile_Number" ColumnName="Mobile_Number" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="login_Date" ColumnName="login_Date" />
+                <ScalarProperty Name="last_Login_date" ColumnName="last_Login_date" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Subject_Table">
+            <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Subject_Table">
+              <MappingFragment StoreEntitySet="Subject_Table">
+                <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+                <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+                <ScalarProperty Name="Subject_Id" ColumnName="Subject_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="save_subject" FunctionName="Mutlipel_Choice_QuestionModel.Store.save_subject" />
+          <FunctionImportMapping FunctionImportName="show_subjects" FunctionName="Mutlipel_Choice_QuestionModel.Store.show_subjects">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Mutlipel_Choice_QuestionModel.show_subjects_Result">
+                <ScalarProperty Name="Subject_Id" ColumnName="Subject_Id" />
+                <ScalarProperty Name="Subjects" ColumnName="Subjects" />
+                <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Subjects_Dropdown" FunctionName="Mutlipel_Choice_QuestionModel.Store.Subjects_Dropdown" />
+          <EntitySetMapping Name="Option_Table">
+            <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Option_Table">
+              <MappingFragment StoreEntitySet="Option_Table">
+                <ScalarProperty Name="Is_Correct" ColumnName="Is_Correct" />
+                <ScalarProperty Name="Option_Text" ColumnName="Option_Text" />
+                <ScalarProperty Name="Options" ColumnName="Options" />
+                <ScalarProperty Name="Question_Id" ColumnName="Question_Id" />
+                <ScalarProperty Name="Option_Id" ColumnName="Option_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question_Table">
+            <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Question_Table">
+              <MappingFragment StoreEntitySet="Question_Table">
+                <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+                <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+                <ScalarProperty Name="Questions" ColumnName="Questions" />
+                <ScalarProperty Name="Question_Id" ColumnName="Question_Id" />
+                <ScalarProperty Name="Subject_Id" ColumnName="Subject_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test_Table">
+            <EntityTypeMapping TypeName="Mutlipel_Choice_QuestionModel.Test_Table">
+              <MappingFragment StoreEntitySet="Test_Table">
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+                <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+                <ScalarProperty Name="Test_Name" ColumnName="Test_Name" />
+                <ScalarProperty Name="Test_Id" ColumnName="Test_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

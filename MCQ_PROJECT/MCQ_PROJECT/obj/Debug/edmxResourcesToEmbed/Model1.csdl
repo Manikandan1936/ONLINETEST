@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Mutlipel_Choice_QuestionModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="Mutlipel_Choice_QuestionEntities1" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Admin_Table" EntityType="Mutlipel_Choice_QuestionModel.Admin_Table" />
+    <FunctionImport Name="Login_Admin" ReturnType="Collection(Mutlipel_Choice_QuestionModel.Login_Admin_Result)">
+      <Parameter Name="user_name" Mode="In" Type="String" />
+      <Parameter Name="password" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Subject_Table" EntityType="Mutlipel_Choice_QuestionModel.Subject_Table" />
+    <FunctionImport Name="save_subject">
+      <Parameter Name="subjects" Mode="In" Type="String" />
+      <Parameter Name="created_by" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="show_subjects" ReturnType="Collection(Mutlipel_Choice_QuestionModel.show_subjects_Result)" />
+    <FunctionImport Name="Subjects_Dropdown" ReturnType="Collection(String)">
+      <Parameter Name="subject_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="Option_Table" EntityType="Mutlipel_Choice_QuestionModel.Option_Table" />
+    <EntitySet Name="Question_Table" EntityType="Mutlipel_Choice_QuestionModel.Question_Table" />
+    <EntitySet Name="Test_Table" EntityType="Mutlipel_Choice_QuestionModel.Test_Table" />
+  </EntityContainer>
+  <EntityType Name="Admin_Table">
+    <Key>
+      <PropertyRef Name="Admin_Id" />
+    </Key>
+    <Property Name="Admin_Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="Email_Id" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="User_Name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="Password" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+    <Property Name="Mobile_Number" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+    <Property Name="Gender" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+    <Property Name="login_Date" Type="DateTime" Precision="3" />
+    <Property Name="last_Login_date" Type="DateTime" Precision="3" />
+  </EntityType>
+  <ComplexType Name="Login_Admin_Result">
+    <Property Type="Int32" Name="Admin_Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Email_Id" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Mobile_Number" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="login_Date" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="last_Login_date" Nullable="true" Precision="23" />
+  </ComplexType>
+  <EntityType Name="Subject_Table">
+    <Key>
+      <PropertyRef Name="Subject_Id" />
+    </Key>
+    <Property Type="Int32" Name="Subject_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="Subjects" MaxLength="400" FixedLength="false" Unicode="false" />
+    <Property Type="Int32" Name="Created_By" />
+  </EntityType>
+  <ComplexType Name="show_subjects_Result">
+    <Property Type="Int32" Name="Subject_Id" Nullable="false" />
+    <Property Type="String" Name="Subjects" Nullable="true" MaxLength="400" />
+    <Property Type="Int32" Name="Created_By" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Option_Table">
+    <Key>
+      <PropertyRef Name="Option_Id" />
+    </Key>
+    <Property Type="Int32" Name="Option_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="Question_Id" />
+    <Property Type="String" Name="Options" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Option_Text" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="Boolean" Name="Is_Correct" />
+  </EntityType>
+  <EntityType Name="Question_Table">
+    <Key>
+      <PropertyRef Name="Question_Id" />
+    </Key>
+    <Property Type="Int32" Name="Subject_Id" />
+    <Property Type="Int32" Name="Question_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="Questions" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Type="Int32" Name="Created_By" />
+    <Property Type="DateTime" Name="Created_Date" Precision="0" />
+  </EntityType>
+  <EntityType Name="Test_Table">
+    <Key>
+      <PropertyRef Name="Test_Id" />
+    </Key>
+    <Property Type="Int32" Name="Test_Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="Test_Name" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="Created_Date" Precision="3" />
+    <Property Type="DateTime" Name="End_Date" Precision="3" />
+    <Property Type="Time" Name="Duration" Precision="7" />
+  </EntityType>
+</Schema>
