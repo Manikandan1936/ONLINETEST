@@ -72,9 +72,9 @@ namespace MCQ_PROJECT.Controllers
              return Json(new { success = true, admin_id = admin_id }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Show_Subjects( DataTableParameter DT)
+        public JsonResult Show_Subjects(DataTableParameters DT)
         {
-            var subject = new DataTableResult();
+            var subject = new DataTableResultSet_SubjectList();
             subject.draw = DT.Draw;
 
 
@@ -140,6 +140,52 @@ namespace MCQ_PROJECT.Controllers
         {
             return View();
         }
+
+        public JsonResult save_testtable(Test_Table Test)
+        {
+            db_context.Test_Table.Add(Test);
+            db_context.SaveChanges();
+
+            return Json("Success");
+        }
+
+
+        public JsonResult show_testtable_data(DataTableParameters DT)
+        {
+
+            var Test = new DataTableResultSet_TestTableList();
+            Test.draw = DT.Draw;
+
+            List<Test_Table> Test_Table = db_context.Test_Table.ToList();
+
+            Test.recordsTotal = Test_Table.Count;
+            Test.recordsFiltered = Test_Table.Count;
+            Test.data = Test_Table;
+
+            return Json(Test, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult Show_Questions()
+        {
+            return View();
+        }
+
+
+        public JsonResult Question_Datatable(DataTableParameters DT)
+        {
+            var Questions = new DataTableResultSet_Questionslist();
+            Questions.draw = DT.Draw;
+
+            var Question_Table = db_context.Question_Table.ToList();
+
+            Questions.recordsTotal = Question_Table.Count;
+            Questions.recordsFiltered = Question_Table.Count;
+            Questions.data = Question_Table;
+
+            return Json(Questions, JsonRequestBehavior.AllowGet);
+        }
+
 
 
 

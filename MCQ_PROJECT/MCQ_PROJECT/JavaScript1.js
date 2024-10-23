@@ -10,14 +10,7 @@
             url: '/MCQ/Admin_Login',
             data: { User_Name: userName, Password: password },
             success: function (response) {
-                if (response) {
-                    // Login successful
-                    //alert('Login successful!');
-                    window.location.href = '/MCQ/Subject_Page';
-                } else {
-                    // Invalid credentials
-                    alert('Invalid username or password!');
-                }
+                
             },
             error: function () {
                 alert('An error occurred. Please try again.');
@@ -193,3 +186,147 @@ $(document).ready(function () {
      });
 
  })
+
+ //save test table
+
+ $(document).ready(function () {
+     $('#btn-test-table').on('click', function (e) {
+         e.preventDefault();
+
+         var test = {
+
+             Test_Name: $('#test-name').val(),
+             Created_Date: $('#create_date').val(),
+             End_Date: $('#end_date').val(),
+             Duration: $('#duration').val()
+         }
+         $.ajax({
+             type: "POST",
+             url: '/MCQ/save_testtable',
+             contentType: 'application/json; charset=utf-8',
+             data: JSON.stringify({ Test: test }),
+             success: function (response) {
+
+             },
+             error: function () {
+                 alert('An error occurred. Please try again.');
+             }
+
+         });
+     });
+ });
+
+
+ //show test table datas
+
+ $(document).ready(function () {
+
+     $("#Test_Table").DataTable({
+
+         "destroy": true,
+         "pagingtype": "full_numbers",
+         "ordering": false,
+
+         ajax: {
+             type: "GET",
+             url: "/MCQ/show_testtable_data",
+             contentType: "application/json",
+
+
+             data: function (d) {
+
+
+                 alert(JSON.stringify(d));
+                 return JSON.stringify(d);
+             },
+
+             error: function (xhr, err) {
+                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                 alert("responseText: " + xhr.responseText);
+             },
+         },
+
+         columns: [
+              { "data": "Test_Id", "autowidth": true },
+              { "data": "Test_Name", "autowidth": true },
+
+            {
+                "data": "Created_Date",
+                "render": function (data) {
+                    return moment(data).format("DD/MM/YYYY HH:mm:ss");
+                },
+                "autowidth": true
+            },
+
+               {
+                   "data": "Created_Date",
+                   "render": function (data) {
+                       return moment(data).format("DD/MM/YYYY HH:mm:ss");
+                   },
+                   "autowidth": true
+               },
+
+                 {
+                     "data": "Duration",
+                     "render": function (data) {
+
+                         return data;
+                     },
+
+
+                     "autowidth": true
+                 }
+
+
+
+         ]
+
+     });
+ });
+
+
+ // show the questions in datatable
+
+ $(document).ready(function () {
+
+     $("#Questions_Table").DataTable({
+
+         "destroy": true,
+         "pagingtype": "full_numbers",
+         "ordering": false,
+
+         ajax: {
+             type: "GET",
+             url: "/MCQ/Question_Datatable",
+             contentType: "application/json",
+
+             data: function (d) {
+
+                 alert(JSON.stringify(d));
+                 return JSON.stringify(d);
+             },
+
+             error: function (xhr, err) {
+                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                 alert("responseText: " + xhr.responseText);
+             },
+         },
+
+         columns: [
+
+              { "data": "Subject_Id", "autowidth": true },
+              { "data": "Question_Id", "autowidth": true },
+              { "data": "Questions", "autowidth": true },
+
+            {
+                "data": null, // Checkbox column
+                "render": function (data, type, row) {
+                    return '<input type="checkbox" class="question-checkbox" value="' + row.Question_Id + '" />';
+                },
+                "orderable": false // Disable sorting on checkbox column
+            }
+
+         ]
+
+     });
+ });
