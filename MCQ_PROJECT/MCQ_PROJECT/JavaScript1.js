@@ -11,6 +11,7 @@
             data: { User_Name: userName, Password: password },
             success: function (response) {
                 
+                window.location.href = "/MCQ/Subject_Page";
             },
             error: function () {
                 alert('An error occurred. Please try again.');
@@ -21,7 +22,6 @@
 
 
 //save subjects
-
 
 $(document).ready(function () {
     $('#subject').on('click', function (e) {
@@ -259,7 +259,7 @@ $(document).ready(function () {
             },
 
                {
-                   "data": "Created_Date",
+                   "data": "End_Date",
                    "render": function (data) {
                        return moment(data).format("DD/MM/YYYY HH:mm:ss");
                    },
@@ -283,6 +283,9 @@ $(document).ready(function () {
 
      });
  });
+
+
+
 
 
  // show the questions in datatable
@@ -329,4 +332,33 @@ $(document).ready(function () {
          ]
 
      });
+
+     $('#submit-questions').on('click', function () {
+         var selectedQuestions = [];
+
+         $('.question-checkbox:checked').each(function () {
+             selectedQuestions.push($(this).val());
+         });
+
+         if (selectedQuestions.length > 0) {
+             $.ajax({
+                 url: '/MCQ/Test_maping',
+                 type: 'POST',
+                 data: JSON.stringify({
+                     Question_Id: selectedQuestions
+                 }),
+                 contentType: 'application/json; charset=utf-8',
+                 success: function (response) {
+                     alert('Questions saved successfully: ' + response);
+                 },
+                 error: function (xhr, status, error) {
+                     alert('Error: ' + xhr.responseText);
+                 }
+             });
+         } else {
+             alert('Please select at least one question to save.');
+         }
+     });
  });
+
+

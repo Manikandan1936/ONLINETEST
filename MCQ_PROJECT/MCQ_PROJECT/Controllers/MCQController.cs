@@ -187,7 +187,28 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
+        public JsonResult Test_maping(Test_Maping Question_Maping, Test_Table Test, List<int> Question_Id)
+        {
+            var created_by = (int)Session["admin_id"];
+            var test_id = Test.Test_Id;
 
+            Question_Maping.Created_Date = DateTime.UtcNow;
+            Question_Maping.Created_By = (int)created_by;
+            Question_Maping.Test_Id = test_id;
+
+            foreach (var questionId in Question_Id)
+            {
+                var existingMapping = db_context.Test_Maping
+          .FirstOrDefault(x => x.Question_Id == questionId && x.Test_Id == test_id);
+
+                db_context.Test_Maping.Add(Question_Maping);
+            }
+            
+            db_context.SaveChanges();
+
+            return Json("success");
+
+        }
 
     }
 }
