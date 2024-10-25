@@ -172,12 +172,16 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Question_Datatable(DataTableParameters DT)
+        public JsonResult Question_Datatable(DataTableParameters DT)    
         {
             var Questions = new DataTableResultSet_Questionslist();
             Questions.draw = DT.Draw;
 
             var Question_Table = db_context.Question_Table.ToList();
+
+            //var Question_Table = db_context.Question_Table
+            //    .Where(q => Subject_id == null || q.Subject_Id == Subject_id)
+            //    .ToList();
 
             Questions.recordsTotal = Question_Table.Count;
             Questions.recordsFiltered = Question_Table.Count;
@@ -187,28 +191,66 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Test_maping(Test_Maping Question_Maping, Test_Table Test, List<int> Question_Id)
+        public JsonResult Test_maping(Test_Maping Question_Maping, Test_Maping Test, List<int> Question_Id)
         {
             var created_by = (int)Session["admin_id"];
-            var test_id = Test.Test_Id;
-
-            Question_Maping.Created_Date = DateTime.UtcNow;
-            Question_Maping.Created_By = (int)created_by;
-            Question_Maping.Test_Id = test_id;
+            var test_id = (int)Session["test_id"];
 
             foreach (var questionId in Question_Id)
             {
-                var existingMapping = db_context.Test_Maping
-          .FirstOrDefault(x => x.Question_Id == questionId && x.Test_Id == test_id);
+                var testMapping = new Test_Maping
+                {
+                    Created_By = created_by,
+                    Test_Id = test_id,
+                    Question_Id = questionId,
+                    Created_Date = DateTime.UtcNow
+                };
 
-                db_context.Test_Maping.Add(Question_Maping);
+                db_context.Test_Maping.Add(testMapping);
             }
-            
+
             db_context.SaveChanges();
 
             return Json("success");
 
         }
+
+        public JsonResult Select_Test()
+        {
+            var Subjects = db_context.Test_Table.Select(s => new
+
+            {
+                Value = s.Test_Id,
+                Text = s.Test_Name
+
+            }).ToList();
+
+            return Json(Subjects, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        public JsonResult Store_TestId(int TEST_ID)
+        {
+            Session["test_id"] = TEST_ID;
+
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult Choose_Subjects ()
+        {
+            var Subjects = db_context.Subject_Table.Select(s => new
+
+            {
+                Value = s.Subject_Id,
+                Text = s.Subjects
+
+            }).ToList();
+
+            return Json(Subjects, JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }

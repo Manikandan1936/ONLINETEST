@@ -270,7 +270,7 @@ $(document).ready(function () {
                      "data": "Duration",
                      "render": function (data) {
 
-                         return data;
+                         return data.Hours + ":" + data.Minutes ;
                      },
 
 
@@ -340,25 +340,64 @@ $(document).ready(function () {
              selectedQuestions.push($(this).val());
          });
 
-         if (selectedQuestions.length > 0) {
+         
              $.ajax({
                  url: '/MCQ/Test_maping',
-                 type: 'POST',
+                 type: "POST",
                  data: JSON.stringify({
                      Question_Id: selectedQuestions
                  }),
                  contentType: 'application/json; charset=utf-8',
                  success: function (response) {
-                     alert('Questions saved successfully: ' + response);
+                     if (response === "success") {
+                         alert('Questions saved successfully');
+                     } else {
+                         alert('An error occurred while saving.');
+                     }
                  },
                  error: function (xhr, status, error) {
                      alert('Error: ' + xhr.responseText);
                  }
              });
-         } else {
-             alert('Please select at least one question to save.');
-         }
+        
      });
  });
 
 
+//test_id dropdown
+ $(document).ready(function () {
+     $.ajax({
+         url: '/MCQ/Select_Test',
+         type: 'GET',
+         dataType: 'json',
+         success: function (data) {
+             //alert(JSON.stringify(data))
+             var $dropdown = $('#select_test');
+             $dropdown.empty();
+             $dropdown.append('<option value="">Select a test</option>');
+             $.each(data, function (index, test) {
+                 $dropdown.append('<option value="' + test.Value + '">' + test.Text + '</option>');
+             });
+         },
+         error: function (xhr, status, error) {
+             console.error('Error fetching subjects: ' + error);
+         }
+     });
+
+     $('#select_test').change(function () {
+         var SelectTestid = $(this).val();
+         $.ajax({
+             url: '/MCQ/Store_TestId',
+             type: 'POST',
+             data: { TEST_ID: SelectTestid },
+             success: function (response) {
+                 //alert(response); 
+             },
+             error: function () {
+                 alert("Error saving TEST ID.");
+             }
+         });
+     });
+
+
+ });
