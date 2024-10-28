@@ -14,8 +14,9 @@ namespace MCQ_PROJECT
     
     public partial class Test_Maping
     {
+        public int Test_Mappingid { get; set; }
         public Nullable<int> Test_Id { get; set; }
-        public int Question_Id { get; set; }
+        public Nullable<int> Question_Id { get; set; }
         public Nullable<System.DateTime> Created_Date { get; set; }
         public Nullable<int> Created_By { get; set; }
     }

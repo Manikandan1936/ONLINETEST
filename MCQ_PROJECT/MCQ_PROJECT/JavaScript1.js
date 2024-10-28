@@ -254,35 +254,41 @@ $(document).ready(function () {
                 "data": "Created_Date",
                 "render": function (data) {
                     return moment(data).format("DD/MM/YYYY HH:mm:ss");
-                },
-                "autowidth": true
+                }, "autowidth": true
             },
-
+               
                {
                    "data": "End_Date",
                    "render": function (data) {
                        return moment(data).format("DD/MM/YYYY HH:mm:ss");
-                   },
-                   "autowidth": true
+                   }, "autowidth": true
                },
 
                  {
                      "data": "Duration",
                      "render": function (data) {
+                         return data.Hours + ":" + data.Minutes;
+                     }, "autowidth": true
+                 },
 
-                         return data.Hours + ":" + data.Minutes ;
+                     {
+                         mRender: function (data, type, row) {
+                             return '<a onclick="viewQuestions (' + row.Test_Id + ')" class = "btn btn-danger">VIEW QUESTIONS</a>'
+                         }
                      },
-
-
-                     "autowidth": true
-                 }
-
-
-
          ]
 
      });
  });
+
+//view questions
+
+ function viewQuestions(testId) {
+     // Redirect to the question table page, passing testId as a query parameter
+     window.location.href = '/MCQ/Question_Datatable?testId=' + testId;
+
+     alert(testId);
+ }
 
 
 
@@ -322,11 +328,11 @@ $(document).ready(function () {
               { "data": "Questions", "autowidth": true },
 
             {
-                "data": null, // Checkbox column
+                "data": null, 
                 "render": function (data, type, row) {
                     return '<input type="checkbox" class="question-checkbox" value="' + row.Question_Id + '" />';
                 },
-                "orderable": false // Disable sorting on checkbox column
+                "orderable": false 
             }
 
          ]
@@ -362,6 +368,9 @@ $(document).ready(function () {
         
      });
  });
+
+
+ 
 
 
 //test_id dropdown
@@ -400,4 +409,25 @@ $(document).ready(function () {
      });
 
 
+ });
+
+
+ $(document).ready(function () {
+     $.ajax({
+         url: '/MCQ/Choose_Subjects',
+         type: 'GET',
+         dataType: 'json',
+         success: function (data) {
+             //alert(JSON.stringify(data))
+             var $dropdown = $('#choose_subject');
+             $dropdown.empty();
+             $dropdown.append('<option value="">Select a test</option>');
+             $.each(data, function (index, test) {
+                 $dropdown.append('<option value="' + test.Value + '">' + test.Text + '</option>');
+             });
+         },
+         error: function (xhr, status, error) {
+             console.error('Error fetching subjects: ' + error);
+         }
+     });
  });

@@ -172,16 +172,14 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Question_Datatable(DataTableParameters DT)    
+        public JsonResult Question_Datatable(DataTableParameters DT, int? subjectId)    
         {
             var Questions = new DataTableResultSet_Questionslist();
             Questions.draw = DT.Draw;
 
             var Question_Table = db_context.Question_Table.ToList();
 
-            //var Question_Table = db_context.Question_Table
-            //    .Where(q => Subject_id == null || q.Subject_Id == Subject_id)
-            //    .ToList();
+
 
             Questions.recordsTotal = Question_Table.Count;
             Questions.recordsFiltered = Question_Table.Count;
@@ -201,7 +199,7 @@ namespace MCQ_PROJECT.Controllers
                 var testMapping = new Test_Maping
                 {
                     Created_By = created_by,
-                    Test_Id = test_id,
+                    Test_Id = test_id,  
                     Question_Id = questionId,
                     Created_Date = DateTime.UtcNow
                 };
@@ -250,6 +248,10 @@ namespace MCQ_PROJECT.Controllers
 
             return Json(Subjects, JsonRequestBehavior.AllowGet);
         }
+
+
+
+
 
 
     }
