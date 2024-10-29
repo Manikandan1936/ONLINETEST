@@ -85,13 +85,75 @@ $(document).ready(function () {
              { "data": "Subjects", "autowidth": true },
              { "data": "Created_By", "autowidth": true },
 
+             {
+                 mRender: function (data, type, row) {
+                     return '<a onclick="Edit_Subject (' + row.Subject_Id + ')" class = "btn btn-primary">EDIT </a>'
+                 }
+             },
+
+              {
+                  mRender: function (data, type, row) {
+                      return '<a onclick="Delete_Subject (' + row.Subject_Id + ')" class = "btn btn-danger">DELETE </a>'
+                  }
+              },
 
         ]
 
     });
 });
 
+//edit subject table
 
+function Edit_Subject(subject_id) {
+    $('#sub_id');
+    $('#sub');
+    
+    $.ajax({
+        url: "/MCQ/Edit_Subject",
+        type: "GET",
+        data: { Subject_Id: subject_id },
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        success: function (result) {
+            $('#sub_id').val(result.SUBJECT_ID);
+            $('#sub').val(result.Subjects);
+          
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+
+}
+
+
+//update subjects
+
+function Update_Subjects() {
+
+    var update_subjects = {
+        UserId: $('#sub_id').val(),
+        FirstName: $('#sub').val(),
+        
+    };
+    $.ajax({
+        url: "/USER/Update_User",
+        data: JSON.stringify(update_user),
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            Show_Data();
+            $('#sub_id').val("");
+            $('#sub').val("");
+            
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+
+}
 //show the subjects in dropdown list
 
  $(document).ready(function () {
@@ -235,7 +297,7 @@ $(document).ready(function () {
 
              data: function (d) {
 
-
+               
                  alert(JSON.stringify(d));
                  return JSON.stringify(d);
              },
@@ -281,15 +343,36 @@ $(document).ready(function () {
      });
  });
 
+
 //view questions
 
  function viewQuestions(testId) {
-     // Redirect to the question table page, passing testId as a query parameter
-     window.location.href = '/MCQ/Question_Datatable?testId=' + testId;
+     $.ajax({
+         url: '/MCQ/Question_View',
+         type: 'GET',
+         data: { Test_Id: testId },
+         success: function (data) {
 
-     alert(testId);
+             alert(JSON.stringify(data));
+
+             window.location.href = "/MCQ/View_Questions";
+
+             $('#Question_Table').DataTable({
+                 destroy: true,
+                 data: data,
+                 columns: [
+                      { "data": "Subject_Id", "autowidth": true },
+              { "data": "Question_Id", "autowidth": true },
+              { "data": "Questions", "autowidth": true },
+
+                 ]
+             });
+         },
+         error: function (xhr, err) {
+             alert("Error fetching questions: " + xhr.responseText);
+         }
+     });
  }
-
 
 
 

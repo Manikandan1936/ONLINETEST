@@ -10,9 +10,8 @@
 namespace MCQ_PROJECT
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Subject_Table
+    public partial class Edit_Subjects_Result
     {
         public int Subject_Id { get; set; }
         public string Subjects { get; set; }
