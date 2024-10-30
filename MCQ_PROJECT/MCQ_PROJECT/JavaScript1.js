@@ -130,29 +130,28 @@ function Edit_Subject(subject_id) {
 //update subjects
 
 function Update_Subjects() {
+    var subjectId = $('#sub_id');
+   
+    var subjectName = $('#sub');
 
-    var update_subjects = {
-        UserId: $('#sub_id').val(),
-        FirstName: $('#sub').val(),
-        
-    };
     $.ajax({
-        url: "/USER/Update_User",
-        data: JSON.stringify(update_user),
-        type: "POST",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            Show_Data();
-            $('#sub_id').val("");
-            $('#sub').val("");
-            
+        url: '/MCQ/Subjects_Update',
+        type: 'POST',
+        data: {
+            Subjects: subjectName,
+            Subject_Id: subjectId
         },
-        error: function (errormessage) {
-            alert(errormessage.responseText);
+        success: function (response) {
+            if (response.success) {
+                alert(response.message);
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+            alert("An error occurred while updating the subject.");
         }
     });
-
 }
 //show the subjects in dropdown list
 
@@ -298,6 +297,7 @@ function Update_Subjects() {
              data: function (d) {
 
                
+
                  alert(JSON.stringify(d));
                  return JSON.stringify(d);
              },
@@ -333,11 +333,15 @@ function Update_Subjects() {
                      }, "autowidth": true
                  },
 
-                     {
-                         mRender: function (data, type, row) {
-                             return '<a onclick="viewQuestions (' + row.Test_Id + ')" class = "btn btn-danger">VIEW QUESTIONS</a>'
-                         }
-                     },
+                    {
+                        // Action button column
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<a onclick="viewQuestions(' + row.Test_Id + ')" class="btn btn-dark">VIEW QUESTIONS</a>';
+                        },
+                        "orderable": false,
+                        "autowidth": true
+                    }
          ]
 
      });
@@ -346,33 +350,47 @@ function Update_Subjects() {
 
 //view questions
 
- function viewQuestions(testId) {
-     $.ajax({
-         url: '/MCQ/Question_View',
-         type: 'GET',
-         data: { Test_Id: testId },
-         success: function (data) {
 
-             alert(JSON.stringify(data));
 
-             window.location.href = "/MCQ/View_Questions";
+     function viewQuestions(test_id) {
 
-             $('#Question_Table').DataTable({
-                 destroy: true,
-                 data: data,
-                 columns: [
-                      { "data": "Subject_Id", "autowidth": true },
-              { "data": "Question_Id", "autowidth": true },
-              { "data": "Questions", "autowidth": true },
+         alert(test_id);
+     
 
-                 ]
-             });
-         },
-         error: function (xhr, err) {
-             alert("Error fetching questions: " + xhr.responseText);
-         }
-     });
- }
+             ajax: {
+                 type: "GET",
+                 url: "/MCQ/Question_View",
+                 contentType: "application/json",
+                 data: { Test_Id: test_id },
+                 success: function (d) {
+                     //window.location.href = "/MCQ/Question_View";
+                     alert(JSON.stringify(d));
+                     return JSON.stringify(d);
+                 },
+
+                 error: function (xhr, err) {
+                     alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                     alert("responseText: " + xhr.responseText);
+                 },
+             },
+
+             $("#View_Questions").DataTable({
+
+                 "destroy": true,
+                 "pagingtype": "full_numbers",
+                 "ordering": false,
+
+             columns: [
+                  { "data": "Question_Id", "autowidth": true },
+                  { "data": "Subject_Id", "autowidth": true },
+                  { "data": "Test_Id", "autowidth": true },
+                   { "data": "Questions", "autowidth": true },
+
+             ]
+
+
+         });
+     }
 
 
 
@@ -380,7 +398,7 @@ function Update_Subjects() {
  // show the questions in datatable
 
  $(document).ready(function () {
-
+    
      $("#Questions_Table").DataTable({
 
          "destroy": true,

@@ -97,11 +97,14 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Update_Subjects(string Subjects, int Subject_Id)
-        {
-            var update_subjects = db_context.
+        //public JsonResult Subjects_Update(string Subjects, int Subject_Id)
+        //{
+        //    var update_subjects = new Subjects
+        //    {
+                
 
-        }
+        //    }
+        //}
 
         public JsonResult Store_Subjectid(int SUBJECT_ID)
         {
@@ -179,6 +182,25 @@ namespace MCQ_PROJECT.Controllers
             return Json(Test, JsonRequestBehavior.AllowGet);
 
         }
+
+
+        public JsonResult Question_View(DataTableParameters DT, int Test_Id)
+        {
+            var Questions = new DataTableResultSet_QuestionView();
+            Questions.draw = DT.Draw;
+
+            var View_Questions = db_context.View_Questions().Where(v => v.Test_Id == Test_Id).ToList();
+
+            Questions.recordsTotal = View_Questions.Count;
+            Questions.recordsFiltered = View_Questions.Count;
+            Questions.data = View_Questions;
+
+            return Json(Questions, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+
 
         public ActionResult Show_Questions()
         {
@@ -270,20 +292,6 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
-        public JsonResult Question_View( int Test_Id)
-        {
-            var Questions = db_context.Question_Table.Where(q => q.Question_Id == Test_Id).Select
-
-           (q => new
-           {
-               q.Question_Id,
-               q.Questions,
-               q.Subject_Id
-
-           }).ToList();
-            return Json(Questions, JsonRequestBehavior.AllowGet);
-
-
-        }
+        
     }
 }

@@ -135,9 +135,9 @@ namespace MCQ_PROJECT
     public class DataTableResultSet_QuestionView
     {
 
-        public List<Question_Table> data = new List<Question_Table>();
+        public List<View_Questions_Result> data = new List<View_Questions_Result>();
 
-        public List<Question_Table> ContainerData = new List<Question_Table>();
+        public List<View_Questions_Result> ContainerData = new List<View_Questions_Result>();
 
         public int draw;
 
