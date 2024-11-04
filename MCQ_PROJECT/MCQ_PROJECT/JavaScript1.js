@@ -296,8 +296,6 @@ function Update_Subjects() {
 
              data: function (d) {
 
-               
-
                  alert(JSON.stringify(d));
                  return JSON.stringify(d);
              },
@@ -333,15 +331,12 @@ function Update_Subjects() {
                      }, "autowidth": true
                  },
 
-                    {
-                        // Action button column
-                        "data": null,
-                        "render": function (data, type, row) {
-                            return '<a onclick="viewQuestions(' + row.Test_Id + ')" class="btn btn-dark">VIEW QUESTIONS</a>';
-                        },
-                        "orderable": false,
-                        "autowidth": true
-                    }
+                   {
+                       mRender: function (data, type, row) {
+
+                           return '<a  onclick="viewQuestions (' + row.Test_Id + ')" class = "btn btn-dark">VIEW QUESTIONS</a>'
+                       }
+                   },
          ]
 
      });
@@ -350,49 +345,40 @@ function Update_Subjects() {
 
 //view questions
 
+ function viewQuestions(testId) {
+     alert(testId);
+   
+     $.ajax({
+         url: '/MCQ/Question_View',
+         type: "GET",
+         data: { Test_Id: testId },
+         success: function (data) {
+             alert("Data will be fetched");
+             alert(JSON.stringify(data))
 
+             window.location.href = "/MCQ/View_Questions";
 
-     function viewQuestions(test_id) {
-
-         alert(test_id);
-     
-
-             ajax: {
-                 type: "GET",
-                 url: "/MCQ/Question_View",
-                 contentType: "application/json",
-                 data: { Test_Id: test_id },
-                 success: function (d) {
-                     //window.location.href = "/MCQ/Question_View";
-                     alert(JSON.stringify(d));
-                     return JSON.stringify(d);
-                 },
-
-                 error: function (xhr, err) {
-                     alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
-                     alert("responseText: " + xhr.responseText);
-                 },
-             },
-
-             $("#View_Questions").DataTable({
-
+             $('#View_Questions').DataTable({
+                 data: data.data, 
+                 columns: [
+                     { "data": "Question_Id", "autowidth": true },
+                     { "data": "Subject_Id", "autowidth": true },
+                     { "data": "Test_Id", "autowidth": true },
+                     { "data": "Questions", "autowidth": true },
+                 ],
                  "destroy": true,
-                 "pagingtype": "full_numbers",
-                 "ordering": false,
+                 "autoWidth": true,
+                 "paging": true, 
+                 "searching": true 
+             });
+         },
+         error: function (xhr, status, error) {
+             alert("An error occurred: " + error);
+         }
+     });
 
-             columns: [
-                  { "data": "Question_Id", "autowidth": true },
-                  { "data": "Subject_Id", "autowidth": true },
-                  { "data": "Test_Id", "autowidth": true },
-                   { "data": "Questions", "autowidth": true },
-
-             ]
-
-
-         });
-     }
-
-
+   
+ }
 
 
  // show the questions in datatable

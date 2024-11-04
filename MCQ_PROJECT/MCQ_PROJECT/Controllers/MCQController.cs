@@ -191,6 +191,9 @@ namespace MCQ_PROJECT.Controllers
 
             var View_Questions = db_context.View_Questions().Where(v => v.Test_Id == Test_Id).ToList();
 
+            Questions.recordsTotal = View_Questions.Count();
+
+
             Questions.recordsTotal = View_Questions.Count;
             Questions.recordsFiltered = View_Questions.Count;
             Questions.data = View_Questions;
