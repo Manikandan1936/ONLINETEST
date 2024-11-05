@@ -130,26 +130,26 @@ function Edit_Subject(subject_id) {
 //update subjects
 
 function Update_Subjects() {
-    var subjectId = $('#sub_id');
-   
-    var subjectName = $('#sub');
 
+    var Update_Subject = {
+        Subject_Id: $('#sub_id').val(),
+        Subjects: $('#subject').val(),
+        
+    };
     $.ajax({
-        url: '/MCQ/Subjects_Update',
-        type: 'POST',
-        data: {
-            Subjects: subjectName,
-            Subject_Id: subjectId
+        url: "/MCQ/Subjects_Update",
+        data: Update_Subject,
+        type: "POST",
+       
+        dataType: "json",
+        success: function (result) {
+           
+            $('#sub_id').val("");
+            $('#subject').val("");
+            
         },
-        success: function (response) {
-            if (response.success) {
-                alert(response.message);
-            } else {
-                alert(response.message);
-            }
-        },
-        error: function () {
-            alert("An error occurred while updating the subject.");
+        error: function (errormessage) {
+            alert(errormessage.responseText);
         }
     });
 }
@@ -331,6 +331,14 @@ function Update_Subjects() {
                      }, "autowidth": true
                  },
 
+
+                  {
+                      mRender: function (data, type, row) {
+
+                          return '<a href="/MCQ/Question_Page"  onclick="AddQuestions (' + row.Test_Id + ')" class = "btn btn-success">ADD QUESTIONS</a>'
+                      }
+                  },
+
                    {
                        mRender: function (data, type, row) {
 
@@ -346,39 +354,40 @@ function Update_Subjects() {
 //view questions
 
  function viewQuestions(testId) {
-     alert(testId);
-   
-     $.ajax({
-         url: '/MCQ/Question_View',
-         type: "GET",
-         data: { Test_Id: testId },
-         success: function (data) {
-             alert("Data will be fetched");
-             alert(JSON.stringify(data))
-
-             window.location.href = "/MCQ/View_Questions";
-
-             $('#View_Questions').DataTable({
-                 data: data.data, 
-                 columns: [
-                     { "data": "Question_Id", "autowidth": true },
-                     { "data": "Subject_Id", "autowidth": true },
-                     { "data": "Test_Id", "autowidth": true },
-                     { "data": "Questions", "autowidth": true },
-                 ],
-                 "destroy": true,
-                 "autoWidth": true,
-                 "paging": true, 
-                 "searching": true 
-             });
-         },
-         error: function (xhr, status, error) {
-             alert("An error occurred: " + error);
-         }
-     });
-
-   
+     window.location.href = "/MCQ/View_Questions?Test_Id=" + testId;
  }
+
+
+ $(document).ready(function () {
+     var urlParams = new URLSearchParams(window.location.search);
+     var testId = urlParams.get('Test_Id');
+
+     if (testId) {
+         $.ajax({
+             url: '/MCQ/Question_View',
+             type: "GET",
+             data: { Test_Id: testId },
+             success: function (data) {
+                 $('#View_Questions').DataTable({
+                     data: data.data, 
+                     columns: [
+                         { "data": "Question_Id", "autoWidth": true },
+                         { "data": "Subject_Id", "autoWidth": true },
+                         { "data": "Test_Id", "autoWidth": true },
+                         { "data": "Questions", "autoWidth": true },
+                     ],
+                     destroy: true,
+                     autoWidth: true,
+                     paging: true, 
+                     searching: true 
+                 });
+             },
+             error: function (xhr, status, error) {
+                 alert("An error occurred: " + error);
+             }
+         });
+     }
+ });
 
 
  // show the questions in datatable

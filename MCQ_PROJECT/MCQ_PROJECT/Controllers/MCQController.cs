@@ -32,7 +32,7 @@ namespace MCQ_PROJECT.Controllers
 
         Mutlipel_Choice_QuestionEntities1 db_context = new Mutlipel_Choice_QuestionEntities1();
 
-
+        //login admin
 
         public JsonResult Admin_Login(string User_Name, string Password)
         {
@@ -63,6 +63,8 @@ namespace MCQ_PROJECT.Controllers
             else { return RedirectToAction("Admin_Login_Page"); }
         }
 
+        //save subjects
+
         public JsonResult save_subjects(string Subjects,Subject_Table sub)
         {
               int admin_id = (int) Session["admin_id"];
@@ -71,6 +73,9 @@ namespace MCQ_PROJECT.Controllers
 
              return Json(new { success = true, admin_id = admin_id }, JsonRequestBehavior.AllowGet);
         }
+
+
+        //show subjects in datatable
 
         public JsonResult Show_Subjects(DataTableParameters DT)
         {
@@ -88,6 +93,7 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
+        //edit subject table
 
         public JsonResult Edit_Subject(int Subject_Id)
         {
@@ -96,15 +102,19 @@ namespace MCQ_PROJECT.Controllers
             return Json(Edit_Subjects, JsonRequestBehavior.AllowGet);
         }
 
+        // update subjecs
 
-        //public JsonResult Subjects_Update(string Subjects, int Subject_Id)
-        //{
-        //    var update_subjects = new Subjects
-        //    {
-                
+        public JsonResult Subjects_Update(int Subjects_Id, string Subjects)
+        {
+            var Update_Subject = db_context.Subject_Table.FirstOrDefault(s => s.Subject_Id == Subjects_Id);
 
-        //    }
-        //}
+            Update_Subject.Subjects = Subjects;
+            db_context.SaveChanges();
+
+            return Json(Update_Subject, JsonRequestBehavior.AllowGet);
+        }
+
+        //store subject id
 
         public JsonResult Store_Subjectid(int SUBJECT_ID)
         {
@@ -114,6 +124,7 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
+        //show subjects in dropdownlist
         public JsonResult Drop_Downlist()
         {
         var Subjects = db_context.Subject_Table.Select(s => new
@@ -128,6 +139,8 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
+
+        // save questions and options
 
         public JsonResult Questions_Options(Question_Table Questions, List<Option_Table> Options)
         {
@@ -158,6 +171,8 @@ namespace MCQ_PROJECT.Controllers
             return View();
         }
 
+
+        //save test in test table
         public JsonResult save_testtable(Test_Table Test)
         {
             db_context.Test_Table.Add(Test);
@@ -166,6 +181,8 @@ namespace MCQ_PROJECT.Controllers
             return Json("Success");
         }
 
+
+        // show test table data in datatable
 
         public JsonResult show_testtable_data(DataTableParameters DT)
         {
@@ -183,6 +200,14 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
+
+        // show questions in datatable
+
+        public ActionResult View_Questions()
+        {
+            return View();
+
+        }
 
         public JsonResult Question_View(DataTableParameters DT, int Test_Id)
         {
@@ -203,14 +228,13 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-
-
         public ActionResult Show_Questions()
         {
             return View();
         }
 
 
+        // show the questions in datatable
         public JsonResult Question_Datatable(DataTableParameters DT)    
         {
             var Questions = new DataTableResultSet_Questionslist();
@@ -227,6 +251,8 @@ namespace MCQ_PROJECT.Controllers
             return Json(Questions, JsonRequestBehavior.AllowGet);
         }
 
+
+        // test mapping table
 
         public JsonResult Test_maping(Test_Maping Question_Maping, Test_Maping Test, List<int> Question_Id)
         {
@@ -252,6 +278,8 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
+        // show the test in driodown list
+
         public JsonResult Select_Test()
         {
             var Subjects = db_context.Test_Table.Select(s => new
@@ -266,6 +294,7 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
+        // get the test id
 
         public JsonResult Store_TestId(int TEST_ID)
         {
@@ -275,6 +304,7 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
+        // show the subjects in dropdown list
         public JsonResult Choose_Subjects ()
         {
             var Subjects = db_context.Subject_Table.Select(s => new
@@ -289,11 +319,7 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public ActionResult View_Questions()
-        {
-            return View();
-
-        }
+       
 
         
     }
