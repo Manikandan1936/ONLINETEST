@@ -362,6 +362,8 @@ function Update_Subjects() {
      var urlParams = new URLSearchParams(window.location.search);
      var testId = urlParams.get('Test_Id');
 
+     alert(urlParams);
+
      if (testId) {
          $.ajax({
              url: '/MCQ/Question_View',
@@ -394,46 +396,80 @@ function Update_Subjects() {
 
  $(document).ready(function () {
     
-     $("#Questions_Table").DataTable({
+     function loadQuestionsTable(subjectId) {
 
-         "destroy": true,
-         "pagingtype": "full_numbers",
-         "ordering": false,
+         $("#Questions_Table").DataTable({
 
-         ajax: {
-             type: "GET",
-             url: "/MCQ/Question_Datatable",
-             contentType: "application/json",
+             "destroy": true,
+             "pagingtype": "full_numbers",
+             "ordering": false,
 
-             data: function (d) {
+             ajax: {
+                 type: "GET",
+                 url: "/MCQ/Question_Datatable",
+                 contentType: "application/json",
 
-                 alert(JSON.stringify(d));
-                 return JSON.stringify(d);
+                 data: function (d) {
+                     d.subjectId = subjectId;
+                     alert(JSON.stringify(d));
+
+                     return d;
+                 },
+
+                 error: function (xhr, err) {
+                     alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                     alert("responseText: " + xhr.responseText);
+                 },
              },
 
-             error: function (xhr, err) {
-                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
-                 alert("responseText: " + xhr.responseText);
-             },
-         },
+             columns: [
 
-         columns: [
+                  { "data": "Subject_Id", "autowidth": true },
+                  { "data": "Question_Id", "autowidth": true },
+                  { "data": "Questions", "autowidth": true },
 
-              { "data": "Subject_Id", "autowidth": true },
-              { "data": "Question_Id", "autowidth": true },
-              { "data": "Questions", "autowidth": true },
+                {
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<input type="checkbox" class="question-checkbox" value="' + row.Question_Id + '" />';
+                    },
+                    "orderable": false
+                }
 
-            {
-                "data": null, 
-                "render": function (data, type, row) {
-                    return '<input type="checkbox" class="question-checkbox" value="' + row.Question_Id + '" />';
-                },
-                "orderable": false 
-            }
+             ]
 
-         ]
+         });
+     }
 
+     // choose the subjects in dropdown list 
+
+     loadQuestionsTable();
+
+     $('#choose_subject').on('change', function () {
+         var subjectId = $(this).val();
+         loadQuestionsTable(subjectId);
      });
+
+
+
+     $.ajax({
+         url: '/MCQ/Choose_Subjects',
+         type: 'GET',
+         dataType: 'json',
+         success: function (data) {
+             var $dropdown = $('#choose_subject');
+             $dropdown.empty();
+             $dropdown.append('<option value="">Select a subject</option>');
+             $.each(data, function (index, subject) {
+                 $dropdown.append('<option value="' + subject.Value + '">' + subject.Text + '</option>');
+             });
+         },
+         error: function (xhr, status, error) {
+             console.error('Error fetching subjects:', xhr);
+         }
+     });
+
+     // test mapping
 
      $('#submit-questions').on('click', function () {
          var selectedQuestions = [];
@@ -466,7 +502,47 @@ function Update_Subjects() {
  });
 
 
- 
+// show_testmapping_data 
+
+ $(document).ready(function () {
+
+     $("#Test_Mapping").DataTable({
+
+         "destroy": true,
+         "pagingtype": "full_numbers",
+         "ordering": false,
+
+         ajax: {
+             type: "GET",
+             url: "/MCQ/Show_Testmappingdata",
+             contentType: "application/json",
+
+             data: function (d) {
+
+                 alert(JSON.stringify(d));
+                 return JSON.stringify(d);
+             },
+
+             error: function (xhr, err) {
+                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                 alert("responseText: " + xhr.responseText);
+             },
+         },
+
+         columns: [
+              { "data": "Test_Id", "autowidth": true },
+              { "data": "Question_Id", "autowidth": true },
+              {
+                  "data": "Created_Date",
+                  "render": function (data) {
+                      return moment(data).format("DD/MM/YYYY HH:mm:ss");
+                  }, "autowidth": true
+              },
+               { "data": "Created_By", "autowidth": true },
+         ]
+
+     });
+ });
 
 
 //test_id dropdown
@@ -508,22 +584,3 @@ function Update_Subjects() {
  });
 
 
- $(document).ready(function () {
-     $.ajax({
-         url: '/MCQ/Choose_Subjects',
-         type: 'GET',
-         dataType: 'json',
-         success: function (data) {
-             //alert(JSON.stringify(data))
-             var $dropdown = $('#choose_subject');
-             $dropdown.empty();
-             $dropdown.append('<option value="">Select a test</option>');
-             $.each(data, function (index, test) {
-                 $dropdown.append('<option value="' + test.Value + '">' + test.Text + '</option>');
-             });
-         },
-         error: function (xhr, status, error) {
-             console.error('Error fetching subjects: ' + error);
-         }
-     });
- });

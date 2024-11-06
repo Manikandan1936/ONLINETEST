@@ -65,13 +65,13 @@ namespace MCQ_PROJECT.Controllers
 
         //save subjects
 
-        public JsonResult save_subjects(string Subjects,Subject_Table sub)
+        public JsonResult save_subjects(string Subjects, Subject_Table sub)
         {
-              int admin_id = (int) Session["admin_id"];
+            int admin_id = (int)Session["admin_id"];
 
-             var subjects = db_context.save_subject(Subjects,admin_id);
+            var subjects = db_context.save_subject(Subjects, admin_id);
 
-             return Json(new { success = true, admin_id = admin_id }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, admin_id = admin_id }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -127,15 +127,15 @@ namespace MCQ_PROJECT.Controllers
         //show subjects in dropdownlist
         public JsonResult Drop_Downlist()
         {
-        var Subjects = db_context.Subject_Table.Select(s => new
+            var Subjects = db_context.Subject_Table.Select(s => new
 
-            {
-                Value = s.Subject_Id,
-                Text = s.Subjects
+                {
+                    Value = s.Subject_Id,
+                    Text = s.Subjects
 
-            }).ToList();
+                }).ToList();
 
-        return Json(Subjects, JsonRequestBehavior.AllowGet);
+            return Json(Subjects, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -144,8 +144,8 @@ namespace MCQ_PROJECT.Controllers
 
         public JsonResult Questions_Options(Question_Table Questions, List<Option_Table> Options)
         {
-            var subject_id = (int) Session["subject_id"];
-            var created_by = (int) Session["admin_id"];
+            var subject_id = (int)Session["subject_id"];
+            var created_by = (int)Session["admin_id"];
 
             Questions.Subject_Id = (int)subject_id;
             Questions.Created_By = (int)created_by;
@@ -158,7 +158,7 @@ namespace MCQ_PROJECT.Controllers
             foreach (var option in Options)
             {
                 option.Question_Id = Questions.Question_Id;
-                db_context.Option_Table.Add(option); 
+                db_context.Option_Table.Add(option);
             }
 
             db_context.SaveChanges();
@@ -201,7 +201,7 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        // show questions in datatable
+        // view questions in datatable
 
         public ActionResult View_Questions()
         {
@@ -235,13 +235,14 @@ namespace MCQ_PROJECT.Controllers
 
 
         // show the questions in datatable
-        public JsonResult Question_Datatable(DataTableParameters DT)    
+        public JsonResult Question_Datatable(DataTableParameters DT, int subjectId)
         {
             var Questions = new DataTableResultSet_Questionslist();
             Questions.draw = DT.Draw;
 
-            var Question_Table = db_context.Question_Table.ToList();
+            var Question_Table = db_context.Question_Table.Where(s => s.Subject_Id == subjectId).ToList();
 
+            //var Question_Table = db_context.Question_Table.ToList();
 
 
             Questions.recordsTotal = Question_Table.Count;
@@ -250,6 +251,22 @@ namespace MCQ_PROJECT.Controllers
 
             return Json(Questions, JsonRequestBehavior.AllowGet);
         }
+
+
+        // show the subjects in dropdown list
+        public JsonResult Choose_Subjects()
+        {
+            var Subjects = db_context.Subject_Table.Select(s => new
+
+            {
+                Value = s.Subject_Id,
+                Text = s.Subjects
+
+            }).ToList();
+
+            return Json(Subjects, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         // test mapping table
@@ -264,7 +281,7 @@ namespace MCQ_PROJECT.Controllers
                 var testMapping = new Test_Maping
                 {
                     Created_By = created_by,
-                    Test_Id = test_id,  
+                    Test_Id = test_id,
                     Question_Id = questionId,
                     Created_Date = DateTime.UtcNow
                 };
@@ -276,6 +293,27 @@ namespace MCQ_PROJECT.Controllers
 
             return Json("success");
 
+        }
+
+        // show test mapping table
+
+        public ActionResult Test_Mapping()
+        {
+            return View();
+        }
+
+        public JsonResult Show_Testmappingdata(DataTableParameters DT)
+        {
+            var Test = new DataTableResultSet_Test_Maping();
+            Test.draw = DT.Draw;
+
+            var Test_Mapping = db_context.Test_Maping.ToList();
+
+            Test.recordsTotal = Test_Mapping.Count;
+            Test.recordsFiltered = Test_Mapping.Count;
+            Test.data = Test_Mapping;
+
+            return Json(Test, JsonRequestBehavior.AllowGet);
         }
 
         // show the test in driodown list
@@ -304,23 +342,21 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        // show the subjects in dropdown list
-        public JsonResult Choose_Subjects ()
+ /// <user>
+ /// 
+ ///
+        /// <invait></user>
+  
+
+
+        public ActionResult Invaite_User()
         {
-            var Subjects = db_context.Subject_Table.Select(s => new
 
-            {
-                Value = s.Subject_Id,
-                Text = s.Subjects
-
-            }).ToList();
-
-            return Json(Subjects, JsonRequestBehavior.AllowGet);
+            return View();
         }
 
 
-       
 
-        
+
     }
 }

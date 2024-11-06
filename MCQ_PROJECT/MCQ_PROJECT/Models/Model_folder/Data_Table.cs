@@ -152,4 +152,24 @@ namespace MCQ_PROJECT
     }
 
 
+    public class DataTableResultSet_Test_Maping
+    {
+
+        public List<Test_Maping> data = new List<Test_Maping>();
+
+        public List<Test_Maping> ContainerData = new List<Test_Maping>();
+
+        public int draw;
+
+        public int recordsFiltered;
+
+        public int recordsTotal;
+
+        public string ToJSON()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
+
 }
