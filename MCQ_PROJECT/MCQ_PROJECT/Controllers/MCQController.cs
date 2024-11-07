@@ -22,12 +22,8 @@ namespace MCQ_PROJECT.Controllers
 
         public ActionResult Question_Page()
         {
-            if (Request.IsAuthenticated)
-            {
+            
                 return View();
-            }
-
-            else { return RedirectToAction("Admin_Login_Page"); }
         }
 
         Mutlipel_Choice_QuestionEntities1 db_context = new Mutlipel_Choice_QuestionEntities1();
@@ -55,12 +51,7 @@ namespace MCQ_PROJECT.Controllers
 
         public ActionResult Subject_Page()
         {
-            if (Request.IsAuthenticated)
-            {
-                return View();
-            }
-
-            else { return RedirectToAction("Admin_Login_Page"); }
+              return View();
         }
 
         //save subjects
@@ -271,7 +262,7 @@ namespace MCQ_PROJECT.Controllers
 
         // test mapping table
 
-        public JsonResult Test_maping(Test_Maping Question_Maping, Test_Maping Test, List<int> Question_Id)
+        public JsonResult Test_maping( List<int> Question_Id)
         {
             var created_by = (int)Session["admin_id"];
             var test_id = (int)Session["test_id"];
@@ -342,11 +333,7 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
- /// <user>
- /// 
- ///
-        /// <invait></user>
-  
+
 
 
         public ActionResult Invaite_User()
@@ -355,8 +342,21 @@ namespace MCQ_PROJECT.Controllers
             return View();
         }
 
+        public JsonResult Save_Email( List<string> Email)
+        {
 
+            //var split_emails = Email.Select(e => e.Trim()).ToList();
 
+            foreach (var email in Email)
+            {
+                db_context.User_Invaite_Table.Add(new User_Invaite_Table { User_Email = email });
+            }
+
+       
+            db_context.SaveChanges();
+
+            return Json("success");
+        }
 
     }
 }

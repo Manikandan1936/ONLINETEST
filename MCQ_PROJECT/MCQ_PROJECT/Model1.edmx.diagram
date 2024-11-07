@@ -5,11 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="97464099c4c74416969a7b81a3a7d702" Name="Diagram1">
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Admin_Table" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Subject_Table" Width="1.5" PointX="2.75" PointY="1.125" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Option_Table" Width="1.5" PointX="6.375" PointY="1" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Question_Table" Width="1.5" PointX="4.625" PointY="1.75" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Table" Width="1.5" PointX="9.25" PointY="1.125" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Admin_Table" Width="1.5" PointX="0.5" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Subject_Table" Width="1.5" PointX="2.125" PointY="1" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Option_Table" Width="1.5" PointX="5.625" PointY="1" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Question_Table" Width="1.5" PointX="3.875" PointY="1.125" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Table" Width="1.5" PointX="7.375" PointY="1" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Maping" Width="1.5" PointX="9.25" PointY="1" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.User_Invaite_Table" Width="1.5" PointX="4.125" PointY="3.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

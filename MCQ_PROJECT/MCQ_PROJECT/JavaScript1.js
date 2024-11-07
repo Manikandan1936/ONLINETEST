@@ -584,3 +584,24 @@ function Update_Subjects() {
  });
 
 
+
+ $(document).ready(function () {
+     $('#btn_user').click(function () {
+         var emails = $('#u_email').val().split(',');
+         alert(emails)
+
+         $.ajax({
+             url: '/MCQ/Save_Email',
+             type: 'POST',
+             data: JSON.stringify({ Email: emails }),
+             contentType: 'application/json; charset=utf-8',
+             success: function (response) {
+
+                 alert('Emails saved successfully!');
+             },
+             error: function (error) {
+                 alert('Error saving emails.');
+             }
+         });
+     });
+ });
