@@ -226,12 +226,12 @@ namespace MCQ_PROJECT.Controllers
 
 
         // show the questions in datatable
-        public JsonResult Question_Datatable(DataTableParameters DT, int subjectId)
+        public JsonResult Question_Datatable(DataTableParameters DT, int SUBJECTID)
         {
             var Questions = new DataTableResultSet_Questionslist();
             Questions.draw = DT.Draw;
 
-            var Question_Table = db_context.Question_Table.Where(s => s.Subject_Id == subjectId).ToList();
+            var Question_Table = db_context.Question_Table.Where(s => s.Subject_Id == SUBJECTID).ToList();
 
             //var Question_Table = db_context.Question_Table.ToList();
 
@@ -342,21 +342,32 @@ namespace MCQ_PROJECT.Controllers
             return View();
         }
 
-        public JsonResult Save_Email( List<string> Email)
+        public JsonResult Save_Email(List<string> Email)
         {
 
-            //var split_emails = Email.Select(e => e.Trim()).ToList();
+            // var split_emails = Email.Select(e => e.Trim()).Distinct().ToList();
 
             foreach (var email in Email)
             {
-                db_context.User_Invaite_Table.Add(new User_Invaite_Table { User_Email = email });
+                db_context.User_Email(email);
             }
-
-       
-            db_context.SaveChanges();
-
             return Json("success");
         }
 
+
+        public JsonResult Show_Useremail( DataTableParameters DT)
+        {
+            var User_Email = new DataTableResultSet_User_Email();
+            User_Email.draw = DT.Draw;
+
+            var Invaite_User = db_context.User_Invaite_Table.ToList();
+
+            User_Email.recordsTotal = Invaite_User.Count;
+            User_Email.recordsFiltered = Invaite_User.Count;
+            User_Email.data = Invaite_User;
+
+            return Json(User_Email, JsonRequestBehavior.AllowGet);
+
+        }
     }
 }

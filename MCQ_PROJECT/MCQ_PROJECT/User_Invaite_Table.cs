@@ -16,6 +16,5 @@ namespace MCQ_PROJECT
     {
         public int Invaite_Id { get; set; }
         public string User_Email { get; set; }
-        public Nullable<System.DateTime> Inavite_Date { get; set; }
     }
 }

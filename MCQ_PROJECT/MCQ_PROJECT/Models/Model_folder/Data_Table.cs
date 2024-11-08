@@ -172,4 +172,24 @@ namespace MCQ_PROJECT
     }
 
 
+    public class DataTableResultSet_User_Email
+    {
+
+        public List<User_Invaite_Table> data = new List<User_Invaite_Table>();
+
+        public List<User_Invaite_Table> ContainerData = new List<User_Invaite_Table>();
+
+        public int draw;
+
+        public int recordsFiltered;
+
+        public int recordsTotal;
+
+        public string ToJSON()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
+
 }

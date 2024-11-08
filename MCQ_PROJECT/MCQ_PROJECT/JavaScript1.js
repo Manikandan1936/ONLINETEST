@@ -410,7 +410,7 @@ function Update_Subjects() {
                  contentType: "application/json",
 
                  data: function (d) {
-                     d.subjectId = subjectId;
+                     d.SUBJECTID = subjectId;
                      alert(JSON.stringify(d));
 
                      return d;
@@ -443,7 +443,7 @@ function Update_Subjects() {
 
      // choose the subjects in dropdown list 
 
-     loadQuestionsTable();
+     //loadQuestionsTable();
 
      $('#choose_subject').on('change', function () {
          var subjectId = $(this).val();
