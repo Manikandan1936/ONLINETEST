@@ -335,7 +335,7 @@ function Update_Subjects() {
                   {
                       mRender: function (data, type, row) {
 
-                          return '<a href="/MCQ/Question_Page"  onclick="AddQuestions (' + row.Test_Id + ')" class = "btn btn-success">ADD QUESTIONS</a>'
+                          return '<a href="/MCQ/Question_Page" (' + row.Test_Id + ')" class = "btn btn-success">ADD QUESTIONS</a>'
                       }
                   },
 
@@ -343,6 +343,13 @@ function Update_Subjects() {
                        mRender: function (data, type, row) {
 
                            return '<a  onclick="viewQuestions (' + row.Test_Id + ')" class = "btn btn-dark">VIEW QUESTIONS</a>'
+                       }
+                   },
+
+                   {
+                       mRender: function (data, type, row) {
+
+                           return '<a  onclick= "get_testid (' + row.Test_Id + ')" class = "btn btn-dark">INVAITE USER</a>'
                        }
                    },
          ]
@@ -584,24 +591,12 @@ function Update_Subjects() {
  });
 
 
+// user
 
- $(document).ready(function () {
-     $('#btn_user').click(function () {
-         var emails = $('#u_email').val().split(',');
-         alert(emails)
+ function get_testid(test_id) {
 
-         $.ajax({
-             url: '/MCQ/Save_Email',
-             type: 'POST',
-             data: JSON.stringify({ Email: emails }),
-             contentType: 'application/json; charset=utf-8',
-             success: function (response) {
+     alert(test_id);
+     window.location.href = "/MCQ/Invaite_User/" + test_id;
 
-                 alert('Emails saved successfully!');
-             },
-             error: function (error) {
-                 alert('Error saving emails.');
-             }
-         });
-     });
- });
+ }
+

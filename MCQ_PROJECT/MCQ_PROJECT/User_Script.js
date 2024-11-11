@@ -1,27 +1,34 @@
 ﻿
 // invait user
 
+
+
 $(document).ready(function () {
-    $('#btn_user').click(function () {
-        var emails = $('#u_email').val().split(',');
-        alert(emails)
 
-        $.ajax({
-            url: '/MCQ/Save_Email',
-            type: 'POST',
-            data: JSON.stringify({ Email: emails }),
-            contentType: 'application/json; charset=utf-8',
-            success: function (response) {
+        $('#btn_user').on('click', function (e) {
+            e.preventDefault();
 
-                alert('Emails saved successfully!');
-            },
-            error: function (error) {
-                alert('Error saving emails.');
-            }
+
+            var emails = $('#u_email').val().split(',');
+            var test_id = $('#u_testid').val();
+                 
+            alert(test_id)
+
+            $.ajax({
+                url: '/MCQ/Save_Email',
+                type: 'POST',
+                data: JSON.stringify({Test_Id : test_id, Email: emails }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+
+                    alert('Emails saved successfully!');
+                },
+                error: function (error) {
+                    alert('Error saving emails.');
+                }
+            });
         });
     });
-});
-
 
 // show user email
 
@@ -60,3 +67,4 @@ $(document).ready(function () {
 
     });
 });
+

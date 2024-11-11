@@ -11,7 +11,7 @@
         <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Question_Table" Width="1.5" PointX="3.875" PointY="1.125" />
         <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Table" Width="1.5" PointX="7.375" PointY="1" />
         <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Maping" Width="1.5" PointX="9.25" PointY="1" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.User_Invaite_Table" Width="1.5" PointX="4.125" PointY="3.625" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.User_Invaite_Table" Width="1.5" PointX="2.25" PointY="3" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

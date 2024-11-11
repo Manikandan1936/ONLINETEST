@@ -15,6 +15,7 @@ namespace MCQ_PROJECT
     public partial class User_Invaite_Table
     {
         public int Invaite_Id { get; set; }
+        public Nullable<int> Test_Id { get; set; }
         public string User_Email { get; set; }
     }
 }

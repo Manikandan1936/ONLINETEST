@@ -338,19 +338,23 @@ namespace MCQ_PROJECT.Controllers
 
         public ActionResult Invaite_User()
         {
-
+           
             return View();
         }
 
-        public JsonResult Save_Email(List<string> Email)
+        public JsonResult Save_Email(int Test_Id, List<string> Email)
         {
-
-            // var split_emails = Email.Select(e => e.Trim()).Distinct().ToList();
-
-            foreach (var email in Email)
+            foreach (var emails in Email)
             {
-                db_context.User_Email(email);
+                db_context.User_Invaite_Table.Add(new User_Invaite_Table
+                    {
+                        User_Email = emails,
+                        Test_Id = Test_Id
+                    });
             }
+
+            db_context.SaveChanges();
+
             return Json("success");
         }
 
