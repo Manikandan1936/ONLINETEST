@@ -349,7 +349,7 @@ function Update_Subjects() {
                    {
                        mRender: function (data, type, row) {
 
-                           return '<a  onclick= "get_testid (' + row.Test_Id + ')" class = "btn btn-dark">INVAITE USER</a>'
+                           return '<a  onclick= "get_testid (' + row.Test_Id + ')" class = "btn btn-dark">INVITE USER</a>'
                        }
                    },
          ]
@@ -596,7 +596,8 @@ function Update_Subjects() {
  function get_testid(test_id) {
 
      alert(test_id);
-     window.location.href = "/MCQ/Invaite_User/" + test_id;
+     sessionStorage.setItem("Test_Id", test_id)
+     window.location.href = "/MCQ/Invaite_User?Test_Id=" + test_id;
 
  }
 
