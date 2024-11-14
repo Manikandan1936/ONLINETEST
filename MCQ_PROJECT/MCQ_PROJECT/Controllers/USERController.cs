@@ -53,22 +53,26 @@ namespace MCQ_PROJECT.Controllers
 
         // user login
 
-        public JsonResult Login_User(string User_Name, string User_Email)
+        public ActionResult Login_User(FormCollection User_Data)
         {
-            var User = db_context.User_Table.Where(u => u.Name == User_Name && u.Email_Id == User_Email).FirstOrDefault();
+            var User_Name = User_Data["user_login"].ToString();
+            var Email = User_Data["login_email"].ToString();
+
+            var User = db_context.User_Table.FirstOrDefault(u => u.Name == User_Name && u.Email_Id == Email);
 
             if (User != null)
             {
-                return Json(new { success = true, message = "Login successful!" });
+                ViewBag.login = "User Login Successfull";
+                return RedirectToAction("User_Registration", "USER");
             }
 
-            else
-            {
+            else {
 
-                return Json(new { success = false, message = "Invalid username or email." });
+                ViewBag.login = "Login Falied";
+                return View("User_Login");
             }
-
 
         }
+        
     }
 }

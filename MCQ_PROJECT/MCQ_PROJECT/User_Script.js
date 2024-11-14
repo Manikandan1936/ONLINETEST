@@ -158,28 +158,32 @@ $(document).ready(function () {
 
 // user login
 
-$(document).ready(function () {
-    $('#login').on('submit', function (e) {
-        e.preventDefault();
+//$(document).ready(function () {
 
-        alert("hii")
+   
 
-        var user_name = $('#user_login').val();
-        var user_email = $('#login_email').val();
+//    $('#login').on('submit', function (e) {
+//        alert("hii")
+//        e.preventDefault();
 
-        $.ajax({
+      
 
-            type: "POST",
-            url: "/USER/Login_User",
-            data: { User_Name: user_name, User_Email: user_email },
-            success: function (response) {
+//        var user_name = $('#user_login').val();
+//        var user_email = $('#login_email').val();
 
-                alert("User Login Successfull")
-            },
+//        $.ajax({
 
-            error: function () {
-                alert("Inavalid Username or Email");
-            },
-        });
-    });
-});
+//            type: "POST",
+//            url: "/USER/Login_User",
+//            data: JSON.stringify( { User_Name: user_name, User_Email: user_email }),
+//            success: function (response) {
+
+//                alert("User Login Successfull")
+//            },
+
+//            error: function () {
+//                alert("Inavalid Username or Email");
+//            },
+//        });
+//    });
+//});
