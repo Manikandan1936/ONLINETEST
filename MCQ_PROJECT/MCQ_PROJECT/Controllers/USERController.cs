@@ -58,20 +58,24 @@ namespace MCQ_PROJECT.Controllers
             var User_Name = User_Data["user_login"].ToString();
             var Email = User_Data["login_email"].ToString();
 
-            var User = db_context.User_Table.FirstOrDefault(u => u.Name == User_Name && u.Email_Id == Email);
+            var Name = db_context.User_Table.FirstOrDefault(u => u.Name == User_Name);
 
-            if (User != null)
+            if (Name == null)
             {
-                ViewBag.login = "User Login Successfull";
-                return RedirectToAction("User_Registration", "USER");
-            }
-
-            else {
-
-                ViewBag.login = "Login Falied";
+                ViewBag.login = "Login Failed: Username is incorrect.";
                 return View("User_Login");
             }
 
+            var User = db_context.User_Table.FirstOrDefault(u => u.Name == User_Name && u.Email_Id == Email);
+
+            if (User == null)
+            {
+                ViewBag.login = "Login Failed: Email is incorrect.";
+                return View("User_Login");
+            }
+
+                ViewBag.login = "User Login Successful";
+                return RedirectToAction("User_Registration", "USER");
         }
         
     }
