@@ -74,9 +74,56 @@ namespace MCQ_PROJECT.Controllers
                 return View("User_Login");
             }
 
-                ViewBag.login = "User Login Successful";
-                return RedirectToAction("User_Registration", "USER");
+            Session["User_ID"] = User.User_Id;
+            Session["Email_Id"] = User.Email_Id;
+
+            ViewBag.login = "User Login Successful";
+            return RedirectToAction("After_Login", "USER");
         }
-        
+
+        public ActionResult After_Login()
+        {
+            return View();
+        }
+
+
+        public JsonResult Login_Data(DataTableParameters DT)
+        {
+            var Test = new DataTableResultSet_TestTableList1();
+            Test.draw = DT.Draw;
+
+
+            int test_id = Convert.ToInt32( Session["User_ID"] );
+
+            var data_table = db_context.Test_Table.Where(e => e.Test_Id == test_id).ToList();
+
+
+
+            Test.recordsTotal = data_table.Count;
+            Test.recordsFiltered = data_table.Count;
+            Test.data = data_table;
+
+            return Json(Test, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public JsonResult StartDuration(int testId)
+        {
+            
+                var test = db_context.Test_Table.FirstOrDefault(e => e.Test_Id == testId);
+                if (test != null)
+                {
+                    test.Created_Date = DateTime.Now; // Start time
+                    test.End_Date = null;            // Reset end time
+                    db_context.SaveChanges();
+                    return Json(new { success = true, message = "Test started successfully!" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Test not found!" }, JsonRequestBehavior.AllowGet);
+                }
+     
+
+        }
     }
 }

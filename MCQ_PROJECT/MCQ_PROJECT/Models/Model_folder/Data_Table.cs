@@ -211,5 +211,28 @@ namespace MCQ_PROJECT
         }
     }
 
+    public class DataTableResultSet_TestTableList1
+    {
+
+
+        public List<Test_Table> data = new List<Test_Table>();
+
+        public List<Test_Table> ContainerData = new List<Test_Table>();
+      
+        public int draw;
+      
+        public int recordsFiltered;
+
+        public int recordsTotal;
+
+        public string ToJSON()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
+
+
+
 
 }

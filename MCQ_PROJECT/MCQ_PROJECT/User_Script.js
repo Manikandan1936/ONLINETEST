@@ -156,4 +156,89 @@ $(document).ready(function () {
 });
 
 
+$(document).ready(function () {
+
+    alert("hii");
+
+    $("#Email_Table").DataTable({
+
+        "destroy": true,
+        "pagingtype": "full_numbers",
+        "ordering": false,
+
+        ajax: {
+            type: "GET",
+            url: "/USER/Login_Data",
+            contentType: "application/json",
+
+
+            data: function (d) {
+
+                alert(JSON.stringify(d));
+                return JSON.stringify(d);
+            },
+
+            error: function (xhr, err) {
+                alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                alert("responseText: " + xhr.responseText);
+            },
+        },
+
+        columns: [
+             { "data": "Test_Id", "autowidth": true },
+           {
+               "data": "Created_Date",
+               "render": function (data) {
+                   return moment(data).format("DD/MM/YYYY HH:mm:ss");
+               }, "autowidth": true
+           },
+
+              {
+                  "data": "End_Date",
+                  "render": function (data) {
+                      return moment(data).format("DD/MM/YYYY HH:mm:ss");
+                  }, "autowidth": true
+              },
+
+                {
+                    "data": "Duration",
+                    "render": function (data) {
+                        return data.Hours + ":" + data.Minutes;
+                    }, "autowidth": true
+                },
+
+        ]
+
+    });
+
+    $("#start_id").on("click", function () {
+           var selectedRowData = $("#Email_Table").DataTable().row(".selected").data();
+
+        if (!selectedRowData) {
+            alert("Please select a row to start!");
+            return;
+        }
+
+           var testId = selectedRowData.Test_Id;
+
+        $.ajax({
+            type: "POST",
+            url: "/USER/StartDuration",
+            data: { testId: testId },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    // Reload DataTable to show updated data
+                    $("#Email_Table").DataTable().ajax.reload();
+                } else {
+                    alert("Error: " + response.message);
+                }
+            },
+            error: function (xhr) {
+                alert("An error occurred: " + xhr.responseText);
+            },
+        });
+    });
+});
+
 
