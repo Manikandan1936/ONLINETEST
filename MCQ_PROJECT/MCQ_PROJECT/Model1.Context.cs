@@ -32,6 +32,9 @@ namespace MCQ_PROJECT
         public DbSet<Subject_Table> Subject_Table { get; set; }
         public DbSet<Option_Table> Option_Table { get; set; }
         public DbSet<Question_Table> Question_Table { get; set; }
+        public DbSet<Test_Maping> Test_Maping { get; set; }
+        public DbSet<User_Invaite_Table> User_Invaite_Table { get; set; }
+        public DbSet<User_Table> User_Table { get; set; }
         public DbSet<Test_Table> Test_Table { get; set; }
     
         public virtual ObjectResult<Login_Admin_Result> Login_Admin(string user_name, string password)
@@ -72,6 +75,42 @@ namespace MCQ_PROJECT
                 new ObjectParameter("subject_id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("Subjects_Dropdown", subject_idParameter);
+        }
+    
+        public virtual ObjectResult<Edit_Subjects_Result> Edit_Subjects(Nullable<int> subject_id)
+        {
+            var subject_idParameter = subject_id.HasValue ?
+                new ObjectParameter("subject_id", subject_id) :
+                new ObjectParameter("subject_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Edit_Subjects_Result>("Edit_Subjects", subject_idParameter);
+        }
+    
+        public virtual int Updtae_Subjects(Nullable<int> subject_id, string subjects)
+        {
+            var subject_idParameter = subject_id.HasValue ?
+                new ObjectParameter("subject_id", subject_id) :
+                new ObjectParameter("subject_id", typeof(int));
+    
+            var subjectsParameter = subjects != null ?
+                new ObjectParameter("subjects", subjects) :
+                new ObjectParameter("subjects", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Updtae_Subjects", subject_idParameter, subjectsParameter);
+        }
+    
+        public virtual ObjectResult<View_Questions_Result> View_Questions()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Questions_Result>("View_Questions");
+        }
+    
+        public virtual int User_Email(string user_Email)
+        {
+            var user_EmailParameter = user_Email != null ?
+                new ObjectParameter("User_Email", user_Email) :
+                new ObjectParameter("User_Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("User_Email", user_EmailParameter);
         }
     }
 }

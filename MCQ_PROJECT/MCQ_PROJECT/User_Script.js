@@ -67,7 +67,18 @@ $(document).ready(function () {
              { "data": "Invaite_Id", "autowidth": true },
               { "data": "Test_Id", "autowidth": true },
              { "data": "User_Email", "autowidth": true },
-                 
+                 {
+                       mRender: function (data, type, row) {
+
+                           return '<a  onclick=" User_Registration (' + row.Test_Id + ')" class = "btn btn-success">USER REGISTRATION</a>'
+                       }
+                 },
+                 {
+                     mRender: function (data, type, row) {
+
+                         return '<a  onclick=" User_Login (' + row.Test_Id + ')" class = "btn btn-danger">USER LOGIN</a>'
+                     }
+                 },
         ]
 
     });
@@ -112,7 +123,7 @@ $(document).ready(function () {
 // show user data
 
 $(document).ready(function () {
-
+   
     $("#User_Table").DataTable({
 
         "destroy": true,
@@ -149,34 +160,43 @@ $(document).ready(function () {
                      return moment(data).format("DD/MM/YYYY HH:mm:ss");
                  }, "autowidth": true
              },
-
         ]
 
     });
 });
 
 
+// store the test_id in session
+
+function User_Login(test_id) {
+
+    alert(test_id);
+    sessionStorage.setItem("Test_Id",test_id)
+    window.location.href = "/USER/User_Login?Test_Id=" + test_id;
+
+}
+
+
+
 $(document).ready(function () {
 
-    alert("hii");
+    var test_id = sessionStorage.getItem("Test_Id");
+
+    alert(test_id);
 
     $("#Email_Table").DataTable({
 
         "destroy": true,
         "pagingtype": "full_numbers",
         "ordering": false,
-
+    
         ajax: {
             type: "GET",
             url: "/USER/Login_Data",
             contentType: "application/json",
-
-
-            data: function (d) {
-
-                alert(JSON.stringify(d));
-                return JSON.stringify(d);
-            },
+            data : {Test_Id : test_id},
+            dataSrc: "data",
+            
 
             error: function (xhr, err) {
                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
@@ -192,6 +212,13 @@ $(document).ready(function () {
                    return moment(data).format("DD/MM/YYYY HH:mm:ss");
                }, "autowidth": true
            },
+
+            {
+                "data": "Start_Date",
+                "render": function (data) {
+                    return moment(data).format("DD/MM/YYYY HH:mm:ss");
+                }, "autowidth": true
+            },
 
               {
                   "data": "End_Date",
@@ -211,34 +238,36 @@ $(document).ready(function () {
 
     });
 
-    $("#start_id").on("click", function () {
-           var selectedRowData = $("#Email_Table").DataTable().row(".selected").data();
-
-        if (!selectedRowData) {
-            alert("Please select a row to start!");
-            return;
-        }
-
-           var testId = selectedRowData.Test_Id;
-
-        $.ajax({
-            type: "POST",
-            url: "/USER/StartDuration",
-            data: { testId: testId },
-            success: function (response) {
-                if (response.success) {
-                    alert(response.message);
-                    // Reload DataTable to show updated data
-                    $("#Email_Table").DataTable().ajax.reload();
-                } else {
-                    alert("Error: " + response.message);
-                }
-            },
-            error: function (xhr) {
-                alert("An error occurred: " + xhr.responseText);
-            },
-        });
-    });
+   
 });
 
 
+
+function makeTimer() {
+
+    //		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");	
+    var endTime = new Date("29 April 2020 9:56:00 GMT+01:00");
+    endTime = (Date.parse(endTime) / 1000);
+
+    var now = new Date();
+    now = (Date.parse(now) / 1000);
+
+    var timeLeft = endTime - now;
+
+    var days = Math.floor(timeLeft / 86400);
+    var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+    var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
+    var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+
+    if (hours < "10") { hours = "0" + hours; }
+    if (minutes < "10") { minutes = "0" + minutes; }
+    if (seconds < "10") { seconds = "0" + seconds; }
+
+    $("#days").html(days + "<span>Days</span>");
+    $("#hours").html(hours + "<span>Hours</span>");
+    $("#minutes").html(minutes + "<span>Minutes</span>");
+    $("#seconds").html(seconds + "<span>Seconds</span>");
+
+}
+
+setInterval(function () { makeTimer(); }, 1000);

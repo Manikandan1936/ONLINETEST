@@ -258,6 +258,7 @@ function Update_Subjects() {
 
              Test_Name: $('#test-name').val(),
              Created_Date: $('#create_date').val(),
+             Start_Date: $('#start_date').val(),
              End_Date: $('#end_date').val(),
              Duration: $('#duration').val()
          }
@@ -312,6 +313,13 @@ function Update_Subjects() {
 
             {
                 "data": "Created_Date",
+                "render": function (data) {
+                    return moment(data).format("DD/MM/YYYY HH:mm:ss");
+                }, "autowidth": true
+            },
+
+            {
+                "data": "Start_Date",
                 "render": function (data) {
                     return moment(data).format("DD/MM/YYYY HH:mm:ss");
                 }, "autowidth": true

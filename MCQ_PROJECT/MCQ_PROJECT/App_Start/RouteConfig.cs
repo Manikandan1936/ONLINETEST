@@ -16,7 +16,7 @@ namespace MCQ_PROJECT
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "USER", action = "User_Registration", id = UrlParameter.Optional }
+                defaults: new { controller = "USER", action = "Start_Test", id = UrlParameter.Optional }
             );
         }
     }

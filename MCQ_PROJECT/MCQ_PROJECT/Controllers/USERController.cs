@@ -87,17 +87,15 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Login_Data(DataTableParameters DT)
+        public JsonResult Login_Data(DataTableParameters DT, int Test_Id)
         {
             var Test = new DataTableResultSet_TestTableList1();
             Test.draw = DT.Draw;
 
 
-            int test_id = Convert.ToInt32( Session["User_ID"] );
+            //int user_id = Convert.ToInt32( Session["User_ID"] );
 
-            var data_table = db_context.Test_Table.Where(e => e.Test_Id == test_id).ToList();
-
-
+            var data_table = db_context.Test_Table.Where(e => e.Test_Id == Test_Id).ToList();
 
             Test.recordsTotal = data_table.Count;
             Test.recordsFiltered = data_table.Count;
@@ -107,23 +105,14 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
-        public JsonResult StartDuration(int testId)
-        {
-            
-                var test = db_context.Test_Table.FirstOrDefault(e => e.Test_Id == testId);
-                if (test != null)
-                {
-                    test.Created_Date = DateTime.Now; // Start time
-                    test.End_Date = null;            // Reset end time
-                    db_context.SaveChanges();
-                    return Json(new { success = true, message = "Test started successfully!" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Test not found!" }, JsonRequestBehavior.AllowGet);
-                }
-     
+      
+        // start test
 
+        public ActionResult Start_Test()
+        {
+
+            return View();
         }
+
     }
 }

@@ -200,7 +200,7 @@ namespace MCQ_PROJECT.Controllers
 
         }
 
-        public JsonResult Question_View(DataTableParameters DT, int Test_Id)
+        public JsonResult Question_View(DataTableParameters DT, int? Test_Id)
         {
             var Questions = new DataTableResultSet_QuestionView();
             Questions.draw = DT.Draw;
