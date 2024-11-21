@@ -114,5 +114,23 @@ namespace MCQ_PROJECT.Controllers
             return View();
         }
 
+        //public ActionResult Time_Remaning(int Test_Id)
+        //{
+        //    var Time = db_context.Test_Table.FirstOrDefault(t => t.Test_Id == Test_Id);
+        //    if (Time == null)
+        //    {
+        //        return Json(new { success = false, message = "Test not found!" }, JsonRequestBehavior.AllowGet);
+        //   }
+
+        //    Time.Start_Date = DateTime.Now;
+
+        //    db_context.SaveChanges();
+
+
+        //    return Json(new { success = true, message = "Test started successfully!", startTime = Time.Start_Date }, JsonRequestBehavior.AllowGet);
+        //}
+
+
+
     }
 }
