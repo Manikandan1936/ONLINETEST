@@ -67,18 +67,7 @@ $(document).ready(function () {
              { "data": "Invaite_Id", "autowidth": true },
               { "data": "Test_Id", "autowidth": true },
              { "data": "User_Email", "autowidth": true },
-                 {
-                       mRender: function (data, type, row) {
-
-                           return '<a  onclick=" User_Registration (' + row.Test_Id + ')" class = "btn btn-success">USER REGISTRATION</a>'
-                       }
-                 },
-                 {
-                     mRender: function (data, type, row) {
-
-                         return '<a  onclick=" User_Login (' + row.Test_Id + ')" class = "btn btn-danger">USER LOGIN</a>'
-                     }
-                 },
+                 
         ]
 
     });
@@ -168,21 +157,12 @@ $(document).ready(function () {
 
 // store the test_id in session
 
-function User_Login(test_id) {
-
-    alert(test_id);
-    sessionStorage.setItem("Test_Id",test_id)
-    window.location.href = "/USER/User_Login?Test_Id=" + test_id;
-
-}
 
 
+// after login
 
 $(document).ready(function () {
-
-    var test_id = sessionStorage.getItem("Test_Id");
-
-    alert(test_id);
+    
 
     $("#Email_Table").DataTable({
 
@@ -194,10 +174,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/USER/Login_Data",
             contentType: "application/json",
-            data: { Test_Id: test_id },
-            dataSrc: "data",
-
-
+            dataSrc: "",
             error: function (xhr, err) {
                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
                 alert("responseText: " + xhr.responseText);
@@ -238,26 +215,5 @@ $(document).ready(function () {
 
     });
 
-    //$("#start_id").click(function () {
-    //    $.ajax({
-    //        type: "POST",
-    //        url: "/USER/Time_Remaning",
-    //        data: { Test_Id: test_id },
-    //        success: function (response) {
-    //            if (response.success) {
-    //                alert(response.message);
-                    
-    //                $('#Email_Table').DataTable().ajax.reload();
-    //            } else {
-    //                alert(response.message);
-    //            }
-    //        },
-    //        error: function (xhr, status, error) {
-    //            alert("Error: " + error);
-    //        }
-    //    });
-    //});
-
 });
-
 

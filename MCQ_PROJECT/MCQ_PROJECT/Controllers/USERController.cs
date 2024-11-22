@@ -53,32 +53,25 @@ namespace MCQ_PROJECT.Controllers
 
         // user login
 
-        public ActionResult Login_User(FormCollection User_Data)
+        public ActionResult Login_User(FormCollection User_Data, Test_Table Test)
         {
             var User_Name = User_Data["user_login"].ToString();
             var Email = User_Data["login_email"].ToString();
 
-            var Name = db_context.User_Table.FirstOrDefault(u => u.Name == User_Name);
-
-            if (Name == null)
-            {
-                ViewBag.login = "Login Failed: Username is incorrect.";
-                return View("User_Login");
-            }
-
             var User = db_context.User_Table.FirstOrDefault(u => u.Name == User_Name && u.Email_Id == Email);
 
-            if (User == null)
+            if (User != null)
             {
-                ViewBag.login = "Login Failed: Email is incorrect.";
-                return View("User_Login");
+                Session["Email"] = User.Email_Id;
+                ViewBag.login = " Login successfull";
+                return RedirectToAction("After_Login", "USER");
             }
 
-            Session["User_ID"] = User.User_Id;
-            Session["Email_Id"] = User.Email_Id;
-
-            ViewBag.login = "User Login Successful";
-            return RedirectToAction("After_Login", "USER");
+            else
+            {
+                return View("User_Login");
+            }
+          
         }
 
         public ActionResult After_Login()
@@ -87,48 +80,34 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Login_Data(DataTableParameters DT, int Test_Id)
+        public JsonResult Login_Data()
         {
-            var Test = new DataTableResultSet_TestTableList1();
-            Test.draw = DT.Draw;
+            var Email = Session["Email"].ToString();
 
+            var Get_Email = db_context.After_Login(Email).ToList();
 
-            //int user_id = Convert.ToInt32( Session["User_ID"] );
-
-            var data_table = db_context.Test_Table.Where(e => e.Test_Id == Test_Id).ToList();
-
-            Test.recordsTotal = data_table.Count;
-            Test.recordsFiltered = data_table.Count;
-            Test.data = data_table;
-
-            return Json(Test, JsonRequestBehavior.AllowGet);
+            return Json(Get_Email,JsonRequestBehavior.AllowGet);
 
         }
 
       
-        // start test
+        // Instruction page test
 
-        public ActionResult Start_Test()
+        public ActionResult Instruction_Page()
         {
 
             return View();
         }
 
-        //public ActionResult Time_Remaning(int Test_Id)
-        //{
-        //    var Time = db_context.Test_Table.FirstOrDefault(t => t.Test_Id == Test_Id);
-        //    if (Time == null)
-        //    {
-        //        return Json(new { success = false, message = "Test not found!" }, JsonRequestBehavior.AllowGet);
-        //   }
 
-        //    Time.Start_Date = DateTime.Now;
-
-        //    db_context.SaveChanges();
+     
 
 
-        //    return Json(new { success = true, message = "Test started successfully!", startTime = Time.Start_Date }, JsonRequestBehavior.AllowGet);
-        //}
+        public ActionResult Questions_Options_Page()
+        {
+            
+            return View();
+        }
 
 
 

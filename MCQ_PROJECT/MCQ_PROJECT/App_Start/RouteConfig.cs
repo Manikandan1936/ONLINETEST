@@ -16,7 +16,7 @@ namespace MCQ_PROJECT
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "MCQ", action = "Invaite_User", id = UrlParameter.Optional }
+                defaults: new { controller = "USER", action = "User_Login", id = UrlParameter.Optional }
             );
         }
     }

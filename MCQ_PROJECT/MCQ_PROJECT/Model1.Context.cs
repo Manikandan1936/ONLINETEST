@@ -112,5 +112,14 @@ namespace MCQ_PROJECT
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("User_Email", user_EmailParameter);
         }
+    
+        public virtual ObjectResult<After_Login_Result> After_Login(string user_email)
+        {
+            var user_emailParameter = user_email != null ?
+                new ObjectParameter("user_email", user_email) :
+                new ObjectParameter("user_email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Result>("After_Login", user_emailParameter);
+        }
     }
 }

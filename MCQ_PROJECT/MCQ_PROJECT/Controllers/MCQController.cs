@@ -342,7 +342,7 @@ namespace MCQ_PROJECT.Controllers
             return View();
         }
 
-        public JsonResult Save_Email(int Test_Id, List<string> Email)
+        public JsonResult Save_Email(int Test_Id, List<string> Email,User_Invaite_Table Save_Id)
         {
             foreach (var emails in Email)
             {
@@ -354,6 +354,8 @@ namespace MCQ_PROJECT.Controllers
             }
 
             db_context.SaveChanges();
+
+            Session["Test_Id"] = Save_Id.Test_Id;
 
             return Json("success");
         }
