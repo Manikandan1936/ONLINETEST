@@ -355,7 +355,7 @@ namespace MCQ_PROJECT.Controllers
 
             db_context.SaveChanges();
 
-            Session["Test_Id"] = Save_Id.Test_Id;
+
 
             return Json("success");
         }
