@@ -121,5 +121,23 @@ namespace MCQ_PROJECT
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Result>("After_Login", user_emailParameter);
         }
+    
+        public virtual ObjectResult<Show_Options_Result> Show_Options(Nullable<int> question_id)
+        {
+            var question_idParameter = question_id.HasValue ?
+                new ObjectParameter("question_id", question_id) :
+                new ObjectParameter("question_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Show_Options_Result>("Show_Options", question_idParameter);
+        }
+    
+        public virtual ObjectResult<Show_Questions_Result> Show_Questions(Nullable<int> question_id)
+        {
+            var question_idParameter = question_id.HasValue ?
+                new ObjectParameter("question_id", question_id) :
+                new ObjectParameter("question_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Show_Questions_Result>("Show_Questions", question_idParameter);
+        }
     }
 }

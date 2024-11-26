@@ -211,13 +211,117 @@ $(document).ready(function () {
                     }, "autowidth": true
                 },
 
+                {
+                    mRender: function (data, type, row) {
+
+                        return '<a  onclick= "Test_Id (' + row.Test_Id + ')" class = "btn btn-success">TAKE TEST</a>'
+                    }
+                },
+
         ],
 
     });
 
 });
 
+function Test_Id(test_id) {
 
+    alert(test_id);
+    sessionStorage.setItem("Test_Id", test_id)
+    window.location.href = "/USER/Questions_Options_Page?Test_Id=" + test_id;
+
+}
+
+
+// show question and options 
+
+
+$(document).ready(function () {
+    var questions = [];
+    var options = []; 
+    var currentIndex = 0; 
+    var testId = sessionStorage.getItem('Test_Id'); 
+    var userResponses = {};
+
+    function fetchQuestions() {
+        $.ajax({
+            url: '/USER/Show_QuestionOptions',
+            type: 'GET',
+            data: { Test_Id: testId },
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8',
+            success: function (result) {
+                questions = result.Question_Options
+                if (questions.length > 0) {
+                    displayQuestion(questions[currentIndex]);
+                    $('#nextbutton').show();
+                } else {
+                    alert('No questions available.');
+                }
+            },
+            error: function () {
+                alert('Failed to load questions.');
+            }
+        });
+    }
+
+
+    function displayQuestion(questions, options) {
+        $('#questionContainer').html('<p>' + questions.Question_Id + '</p>' +
+                                      '<p>' + questions.Questions + '</p>');
+        $('#optionsContainer').empty();
+        //alert(JSON.stringify(questions))
+      
+        options.forEach(function (option) {
+            var savedResponse = userResponses[questions.Question_Id];
+            var isChecked = savedResponse && savedResponse.Option_Id === option.Option_Id ? 'checked' : '';
+
+            $('#optionsContainer').append('<div><input type="radio" name="options" value="' + option.Option_Id + '" ' + isChecked + '> ' + option.Option_Text + '</div>');
+        });
+
+      
+        $('#backbutton').show(currentIndex > 0);
+        $('#nextbutton').toggle(currentIndex < questions.length - 1);
+    }
+
+    $('#nextbutton').click(function () {
+        var selectedOption = $('input[name="options"]:checked');
+        if (selectedOption.length === 0) {
+            alert('Please select an option.');
+            return;
+        }
+
+        var selectedOptionId = selectedOption.val();
+        var currentQuestionId = questions[currentIndex].Question_Id;
+
+       
+
+        userResponses[currentQuestionId] = {
+            Question_Id: currentQuestionId,
+            Option_Id: selectedOptionId
+        };
+
+        alert(JSON.stringify(userResponses))
+
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            displayQuestion(questions[currentIndex], options);
+        } else {
+            alert('You have reached the end of the questions.');
+        }
+
+
+    });
+
+    $('#backbutton').click(function () {
+        if (currentIndex > 0) {
+            currentIndex--;
+            displayQuestion(questions[currentIndex], options);
+        }
+    });
+
+    fetchQuestions();
+});
 
 
 

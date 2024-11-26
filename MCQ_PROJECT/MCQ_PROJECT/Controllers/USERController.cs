@@ -84,7 +84,6 @@ namespace MCQ_PROJECT.Controllers
         {
             var Email = Session["Email"].ToString();
 
-            var Test_Id = Session["Test_Id"];
 
             var Get_Email = db_context.After_Login(Email).ToList();
 
@@ -121,23 +120,18 @@ namespace MCQ_PROJECT.Controllers
 
         public JsonResult Show_QuestionOptions(int Test_Id)
         {
-            var Questions = db_context.Question_Table.Where(q => q.Question_Id == Test_Id).Select(q => new
+            var questions = db_context.Show_Questions(Test_Id).ToList();
+
+            var options = db_context.Show_Options(Test_Id).ToList();
+
+            var Question_Options = new
             {
-                q.Question_Id,
-                q.Questions,
-            }).ToList();
 
-            //var Options = db_context.Option_Table.Select(o => new
-            //{
-            //    o.Option_Id,
-            //    o.Options,
-            //    o.Option_Text,
-            //    o.Is_Correct
+                Questions = questions,
+                Options = options
+            };
 
-            //}).ToList();
-
-
-            return Json(new{Questions}, JsonRequestBehavior.AllowGet);
+            return Json(Question_Options, JsonRequestBehavior.AllowGet);
         }
     }
 }
