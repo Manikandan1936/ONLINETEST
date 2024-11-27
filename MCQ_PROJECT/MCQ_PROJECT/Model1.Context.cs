@@ -122,22 +122,67 @@ namespace MCQ_PROJECT
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Result>("After_Login", user_emailParameter);
         }
     
-        public virtual ObjectResult<Show_Options_Result> Show_Options(Nullable<int> question_id)
+        public virtual int Show_Options(Nullable<int> question_id)
         {
             var question_idParameter = question_id.HasValue ?
                 new ObjectParameter("question_id", question_id) :
                 new ObjectParameter("question_id", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Show_Options_Result>("Show_Options", question_idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Show_Options", question_idParameter);
         }
     
-        public virtual ObjectResult<Show_Questions_Result> Show_Questions(Nullable<int> question_id)
+        public virtual int Show_Questions(Nullable<int> question_id)
         {
             var question_idParameter = question_id.HasValue ?
                 new ObjectParameter("question_id", question_id) :
                 new ObjectParameter("question_id", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Show_Questions_Result>("Show_Questions", question_idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Show_Questions", question_idParameter);
+        }
+    
+        public virtual ObjectResult<Show_Options1_Result> Show_Options1(Nullable<int> question_id)
+        {
+            var question_idParameter = question_id.HasValue ?
+                new ObjectParameter("question_id", question_id) :
+                new ObjectParameter("question_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Show_Options1_Result>("Show_Options1", question_idParameter);
+        }
+    
+        public virtual ObjectResult<Show_Questions1_Result> Show_Questions1(Nullable<int> question_id)
+        {
+            var question_idParameter = question_id.HasValue ?
+                new ObjectParameter("question_id", question_id) :
+                new ObjectParameter("question_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Show_Questions1_Result>("Show_Questions1", question_idParameter);
+        }
+    
+        public virtual int Question_Mapping(Nullable<int> test_id)
+        {
+            var test_idParameter = test_id.HasValue ?
+                new ObjectParameter("test_id", test_id) :
+                new ObjectParameter("test_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Question_Mapping", test_idParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Question_Id_Mapping(Nullable<int> test_id)
+        {
+            var test_idParameter = test_id.HasValue ?
+                new ObjectParameter("test_id", test_id) :
+                new ObjectParameter("test_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Question_Id_Mapping", test_idParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> Question_Id_Mapping1(Nullable<int> test_id)
+        {
+            var test_idParameter = test_id.HasValue ?
+                new ObjectParameter("test_id", test_id) :
+                new ObjectParameter("test_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Question_Id_Mapping1", test_idParameter);
         }
     }
 }

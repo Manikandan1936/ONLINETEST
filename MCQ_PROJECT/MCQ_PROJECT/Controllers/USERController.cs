@@ -87,8 +87,6 @@ namespace MCQ_PROJECT.Controllers
 
             var Get_Email = db_context.After_Login(Email).ToList();
 
-
-
             return Json(Get_Email,JsonRequestBehavior.AllowGet);
         }
 
@@ -102,13 +100,7 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Run_Time(int testId )
-        {
-            var testDetails = db_context.Test_Table.FirstOrDefault(t => t.Test_Id == testId);
-
-            return Json(testDetails, JsonRequestBehavior.AllowGet);
-           
-        }
+        
         // show the question and options
 
         public ActionResult Questions_Options_Page()
@@ -120,18 +112,24 @@ namespace MCQ_PROJECT.Controllers
 
         public JsonResult Show_QuestionOptions(int Test_Id)
         {
-            var questions = db_context.Show_Questions(Test_Id).ToList();
+            var questionIds = db_context.Question_Id_Mapping1(Test_Id).ToList();
 
-            var options = db_context.Show_Options(Test_Id).ToList();
+            var questions = db_context.Question_Table
+                                       .Where(q => questionIds.Contains(q.Question_Id))
+                                       .ToList(); 
 
-            var Question_Options = new
+            var Options = db_context.Option_Table.ToList();
+
+            var questionOptions = questions.Select(q => new
             {
+                Question_Id = q.Question_Id,
+                Question_Text = q.Questions,
+                Options = Options.Where(o => o.Question_Id == q.Question_Id)
+                                 .Select(o => new { o.Option_Id, o.Option_Text })
+                                 .ToList()
+            }).ToList();
 
-                Questions = questions,
-                Options = options
-            };
-
-            return Json(Question_Options, JsonRequestBehavior.AllowGet);
+            return Json(questionOptions, JsonRequestBehavior.AllowGet);
         }
     }
 }

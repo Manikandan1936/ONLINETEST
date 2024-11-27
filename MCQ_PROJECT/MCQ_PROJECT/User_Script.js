@@ -238,26 +238,63 @@ function Test_Id(test_id) {
 
 $(document).ready(function () {
     var questions = [];
-    var options = []; 
-    var currentIndex = 0; 
-    var testId = sessionStorage.getItem('Test_Id'); 
+    var currentIndex = 0;
+    var testId = sessionStorage.getItem('Test_Id');  
     var userResponses = {};
+    var totalTime = 30 * 60; 
+    var remainingTime = totalTime;
+
+
+    function formatTime(seconds) {
+        var minutes = Math.floor(seconds / 60);
+        var sec = seconds % 60;
+        return minutes.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
+    }
+
+    
+    function updateTimer() {
+        if (remainingTime <= 0) {
+           
+            $('#nextbutton').prop('disabled', true);
+            $('#backbutton').prop('disabled', true);
+            alert('Time is up! The test has been completed.');
+            
+            
+        } else {
+            remainingTime--;
+            sessionStorage.setItem('remainingTime', remainingTime);
+            $('#timer').text('Time Remaining: ' + formatTime(remainingTime));
+        }
+    }
+
+
+
 
     function fetchQuestions() {
+        // Ensure the Test_Id is available
+        //if (!testId) {
+        //    alert('Test ID is missing. Please restart the test.');
+        //    return;
+        //}
+
         $.ajax({
             url: '/USER/Show_QuestionOptions',
             type: 'GET',
             data: { Test_Id: testId },
             dataType: 'json',
-            contentType: 'application/json;charset=utf-8',
             success: function (result) {
-                questions = result.Question_Options
+                questions = result;
+
                 if (questions.length > 0) {
                     displayQuestion(questions[currentIndex]);
                     $('#nextbutton').show();
+                    setInterval(updateTimer, 1000);
+                    sessionStorage.setItem('timerStarted', true);
                 } else {
                     alert('No questions available.');
                 }
+
+                
             },
             error: function () {
                 alert('Failed to load questions.');
@@ -265,61 +302,54 @@ $(document).ready(function () {
         });
     }
 
-
-    function displayQuestion(questions, options) {
-        $('#questionContainer').html('<p>' + questions.Question_Id + '</p>' +
-                                      '<p>' + questions.Questions + '</p>');
+    function displayQuestion(question) {
+   
+        $('#questionContainer').html('<p>Q' + (currentIndex + 1) + ': ' + question.Question_Text + '</p>');
         $('#optionsContainer').empty();
-        //alert(JSON.stringify(questions))
-      
-        options.forEach(function (option) {
-            var savedResponse = userResponses[questions.Question_Id];
-            var isChecked = savedResponse && savedResponse.Option_Id === option.Option_Id ? 'checked' : '';
 
+
+        question.Options.forEach(function (option) {
+            var savedResponse = userResponses[question.Question_Id];
+            var isChecked = savedResponse && savedResponse.Option_Id === option.Option_Id ? 'checked' : '';
             $('#optionsContainer').append('<div><input type="radio" name="options" value="' + option.Option_Id + '" ' + isChecked + '> ' + option.Option_Text + '</div>');
         });
 
-      
+        // Show/hide the back and next buttons
         $('#backbutton').show(currentIndex > 0);
         $('#nextbutton').toggle(currentIndex < questions.length - 1);
     }
 
     $('#nextbutton').click(function () {
         var selectedOption = $('input[name="options"]:checked');
-        if (selectedOption.length === 0) {
-            alert('Please select an option.');
-            return;
-        }
-
         var selectedOptionId = selectedOption.val();
         var currentQuestionId = questions[currentIndex].Question_Id;
 
-       
-
-        userResponses[currentQuestionId] = {
-            Question_Id: currentQuestionId,
-            Option_Id: selectedOptionId
-        };
-
-        alert(JSON.stringify(userResponses))
-
-        if (currentIndex < questions.length - 1) {
-            currentIndex++;
-            displayQuestion(questions[currentIndex], options);
-        } else {
-            alert('You have reached the end of the questions.');
+        
+        if (selectedOptionId) {
+            userResponses[currentQuestionId] = {
+                Question_Id: currentQuestionId,
+                Option_Id: selectedOptionId
+            };
         }
 
-
+        
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            displayQuestion(questions[currentIndex]);
+        } else {
+            alert('You have completed the questions.');
+           
+        }
     });
 
     $('#backbutton').click(function () {
         if (currentIndex > 0) {
             currentIndex--;
-            displayQuestion(questions[currentIndex], options);
+            displayQuestion(questions[currentIndex]);
         }
     });
 
+    // Initialize the question loading
     fetchQuestions();
 });
 
