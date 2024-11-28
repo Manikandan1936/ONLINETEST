@@ -155,9 +155,6 @@ $(document).ready(function () {
 });
 
 
-// store the test_id in session
-
-
 
 // after login
 
@@ -214,7 +211,7 @@ $(document).ready(function () {
                 {
                     mRender: function (data, type, row) {
 
-                        return '<a  onclick= "Test_Id (' + row.Test_Id + ')" class = "btn btn-success">TAKE TEST</a>'
+                        return '<a onclick="Test_Id(' + row.Test_Id + ', \'' + row.Duration.Hours + ':' + row.Duration.Minutes + '\')" class="btn btn-success">TAKE TEST</a>';
                     }
                 },
 
@@ -224,12 +221,16 @@ $(document).ready(function () {
 
 });
 
-function Test_Id(test_id) {
+// get the testid and duration in session storage
 
-    alert(test_id);
+function Test_Id(test_id,duration) {
+
+    alert("Test ID: " + test_id + "\nDuration: " + duration);
+
     sessionStorage.setItem("Test_Id", test_id)
-    window.location.href = "/USER/Questions_Options_Page?Test_Id=" + test_id;
+    sessionStorage.setItem("Test_Duration", duration);
 
+    window.location.href = "/USER/Questions_Options_Page?Test_Id=" + test_id;
 }
 
 
@@ -239,25 +240,33 @@ function Test_Id(test_id) {
 $(document).ready(function () {
     var questions = [];
     var currentIndex = 0;
-    var testId = sessionStorage.getItem('Test_Id');  
+    var testId = sessionStorage.getItem('Test_Id');
+    var duration = sessionStorage.getItem('Test_Duration');
+    var totalTime = 0;
     var userResponses = {};
-    var totalTime = 30 * 60; 
-    var remainingTime = totalTime;
 
+    var timeParts = duration.split(':').map(Number);
+    var hours = timeParts[0]; 
+    var minutes = timeParts[1];
+    var totalTime = (hours * 60 + minutes) * 60;
+
+    var remainingTime = sessionStorage.getItem('remainingTime')
+       ? parseInt(sessionStorage.getItem('remainingTime'), 10)
+       : totalTime;
 
     function formatTime(seconds) {
         var minutes = Math.floor(seconds / 60);
         var sec = seconds % 60;
         return minutes.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
     }
-
     
     function updateTimer() {
         if (remainingTime <= 0) {
            
-            $('#nextbutton').prop('disabled', true);
-            $('#backbutton').prop('disabled', true);
+            clearInterval(timerInterval); // Stop the timer
             alert('Time is up! The test has been completed.');
+            $('#nextbutton, #backbutton').prop('disabled', true); // Disable buttons
+            sessionStorage.removeItem('remainingTime'); 
             
             
         } else {
@@ -271,16 +280,11 @@ $(document).ready(function () {
 
 
     function fetchQuestions() {
-        // Ensure the Test_Id is available
-        //if (!testId) {
-        //    alert('Test ID is missing. Please restart the test.');
-        //    return;
-        //}
 
         $.ajax({
             url: '/USER/Show_QuestionOptions',
             type: 'GET',
-            data: { Test_Id: testId },
+            data: { Test_Id: testId},
             dataType: 'json',
             success: function (result) {
                 questions = result;
@@ -288,8 +292,11 @@ $(document).ready(function () {
                 if (questions.length > 0) {
                     displayQuestion(questions[currentIndex]);
                     $('#nextbutton').show();
-                    setInterval(updateTimer, 1000);
-                    sessionStorage.setItem('timerStarted', true);
+
+                    if (!sessionStorage.getItem('timerStarted')) {
+                        timerInterval = setInterval(updateTimer, 1000);
+                        sessionStorage.setItem('timerStarted', true);
+                    }
                 } else {
                     alert('No questions available.');
                 }
@@ -349,8 +356,9 @@ $(document).ready(function () {
         }
     });
 
-    // Initialize the question loading
     fetchQuestions();
+
+    var timerInterval = setInterval(updateTimer, 1000);
 });
 
 

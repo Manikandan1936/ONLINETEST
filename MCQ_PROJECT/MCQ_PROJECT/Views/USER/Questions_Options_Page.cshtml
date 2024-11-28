@@ -8,36 +8,58 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Questions_Options_Page</title>
-      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
     <script src="~/Scripts/moment.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
-   <script src="~/User_Script.js"></script>
+    <script src="handlebars.min.js"></script>
+        <script src="~/User_Script.js"></script>
 </head>
 <body>
+
+    <script id="Question_Template" type="text/x-handlebars-template">
+
+    <div class="question">
+        <h4>Question {{index}}: {{Question_Text}}</h4>
+
+        {{#each Options}}
+
+        <div class="form-check">
+
+            <input class="form-check-input" type="radio" name="options" value="{{Option_Id}}" id="option-{{Option_Id}}">
+
+            <label class="form-check-label" for="option-{{Option_Id}}">{{Option_Text}}</label>
+
+        </div>
+
+        {{/each}}
+    </div>
+
+        </script>
+
+
+
     <div class="container mt-5">
         <div class="row">
-     <div class="col-3"></div>
-            
-           <div class="col-6">
+            <div class="col-3"></div>
 
-          <div id="questionContainer"></div>
+            <div class="col-6">
 
-     
+                <div id="questionContainer"></div>
 
-   <div id="optionsContainer"></div>
+                <div id="optionsContainer"></div>
 
-    <button id="backbutton" class="nav-button; btn btn-danger">BACK</button>
+                <button id="backbutton" class="nav-button; btn btn-danger">BACK</button>
 
-        <button id="nextbutton" class="nav-button; btn btn-primary">Next Question</button>
-               </div>
+                <button id="nextbutton" class="nav-button; btn btn-primary">Next Question</button>
+            </div>
 
             <div class="col-3">
                 <div id="timer">Time Remaining: 00:00</div>
             </div>
-    </div>
         </div>
+    </div>
 </body>
 </html>
