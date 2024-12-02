@@ -311,19 +311,19 @@ $(document).ready(function () {
 
     function displayQuestion(question) {
    
-        $('#questionContainer').html('<p>Q' + (currentIndex + 1) + ': ' + question.Question_Text + '</p>');
-        $('#optionsContainer').empty();
+        var templateSource = $('#Question_Template').html();
+        var template = Handlebars.compile(templateSource);
+        
+        question.index = currentIndex + 1;
 
-
-        question.Options.forEach(function (option) {
-            var savedResponse = userResponses[question.Question_Id];
-            var isChecked = savedResponse && savedResponse.Option_Id === option.Option_Id ? 'checked' : '';
-            $('#optionsContainer').append('<div><input type="radio" name="options" value="' + option.Option_Id + '" ' + isChecked + '> ' + option.Option_Text + '</div>');
-        });
+        var questionHtml = template(question);
+        $('#questionContainer').html(questionHtml);
 
         // Show/hide the back and next buttons
-        $('#backbutton').show(currentIndex > 0);
+        $('#backbutton').toggle(currentIndex > 0);
         $('#nextbutton').toggle(currentIndex < questions.length - 1);
+        $('#submit_questions').toggle(currentIndex === questions.length - 1);
+            
     }
 
     $('#nextbutton').click(function () {
@@ -331,21 +331,31 @@ $(document).ready(function () {
         var selectedOptionId = selectedOption.val();
         var currentQuestionId = questions[currentIndex].Question_Id;
 
-        
         if (selectedOptionId) {
             userResponses[currentQuestionId] = {
                 Question_Id: currentQuestionId,
                 Option_Id: selectedOptionId
             };
+
+            $.ajax({
+                url: '/USER/Save_KeyValues', 
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userResponses),
+                success: function () {
+                    console.log('Response saved successfully.');
+                },
+                error: function () {
+                    alert('Failed to save the response.');
+                }
+            });
         }
 
-        
         if (currentIndex < questions.length - 1) {
             currentIndex++;
             displayQuestion(questions[currentIndex]);
         } else {
             alert('You have completed the questions.');
-           
         }
     });
 
@@ -362,6 +372,16 @@ $(document).ready(function () {
 });
 
 
+// save questions and options
+
+$('#submit_questions').click(function () { 
 
 
 
+
+
+
+
+
+
+})
