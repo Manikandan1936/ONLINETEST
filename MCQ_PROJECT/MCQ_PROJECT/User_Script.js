@@ -321,7 +321,7 @@ $(document).ready(function () {
 
         // Show/hide the back and next buttons
         $('#backbutton').toggle(currentIndex > 0);
-        $('#nextbutton').toggle(currentIndex < questions.length - 1);
+        $('#nextbutton').show(currentIndex < questions.length - 1);
         $('#submit_questions').toggle(currentIndex === questions.length - 1);
             
     }
@@ -332,32 +332,61 @@ $(document).ready(function () {
         var currentQuestionId = questions[currentIndex].Question_Id;
 
         if (selectedOptionId) {
+            // Store response in userResponses dictionary
             userResponses[currentQuestionId] = {
                 Question_Id: currentQuestionId,
                 Option_Id: selectedOptionId
             };
 
-            $.ajax({
-                url: '/USER/Save_KeyValues', 
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(userResponses),
-                success: function () {
-                    console.log('Response saved successfully.');
-                },
-                error: function () {
-                    alert('Failed to save the response.');
-                }
-            });
+            console.log(userResponses); 
         }
 
         if (currentIndex < questions.length - 1) {
             currentIndex++;
             displayQuestion(questions[currentIndex]);
+        } 
+        
+    });
+
+
+    $('#submit_questions').click(function () {
+
+        var Test_Id = sessionStorage.getItem('Test_Id');
+        // Ensure all questions are answered before submitting
+        if (Object.keys(userResponses).length === questions.length) {
+            // Add the Test_Id to each response
+            var responsesWithTestId = Object.values(userResponses).map(function (response) {
+                return {
+                    Question_Id: response.Question_Id,
+                    Option_Id: response.Option_Id,
+                    Test_Id: parseInt(Test_Id) // Ensure Test_Id is parsed as an integer
+                };
+            });
+
+
+            // AJAX call to submit the answers
+            $.ajax({
+                url: '/USER/Save_KeyValues',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(responsesWithTestId),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                    } else {
+                        alert('Failed to submit answers: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred while submitting the answers: ' + error);
+                }
+            });
         } else {
-            alert('You have completed the questions.');
+            // Warn the user if not all questions are answered
+            alert('Please answer all questions before submitting.');
         }
     });
+
 
     $('#backbutton').click(function () {
         if (currentIndex > 0) {
@@ -374,14 +403,3 @@ $(document).ready(function () {
 
 // save questions and options
 
-$('#submit_questions').click(function () { 
-
-
-
-
-
-
-
-
-
-})

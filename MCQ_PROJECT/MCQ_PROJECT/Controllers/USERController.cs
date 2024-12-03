@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
+using System.Web.Http;
 
 namespace MCQ_PROJECT.Controllers
 {
@@ -136,21 +138,30 @@ namespace MCQ_PROJECT.Controllers
         }
 
 
-        public JsonResult Save_KeyValues(Dictionary<int, int> Dictionary_Values)
+        public JsonResult Save_KeyValues(List<Answer_Table> Store_Value)
         {
+            var User_Id = Session["user_id"];
 
-            var sessionResponses = Session["user_responses"] as Dictionary<int, int> ?? new Dictionary<int, int>();
+            foreach (var storeValue in Store_Value)
+                {
+                    var answer = new Answer_Table
+                    {
+                        User_Id = Convert.ToInt32(User_Id),
+                        Tset_Id = storeValue.Tset_Id,
+                        Question_Id = storeValue.Question_Id,
+                        Option_Id = storeValue.Option_Id,
+                       
+                    };
 
-            foreach (var response in Dictionary_Values)
-            {
-                sessionResponses[response.Key] = response.Value; 
-            }
+                    db_context.Answer_Table.Add(answer);
+                }
 
-            Session["user_responses"] = sessionResponses;
+                db_context.SaveChanges();
 
-
-            return Json("success");
+                return Json(new { success = true, message = "saved successfully!" });
+            
         }
+
 
 
         public JsonResult Submit_QuestionOptions(Dictionary<int, int> Save_values)
