@@ -137,50 +137,22 @@ namespace MCQ_PROJECT.Controllers
             return Json(questionOptions, JsonRequestBehavior.AllowGet);
         }
 
-
-        public JsonResult Save_KeyValues(List<Answer_Table> Store_Value)
+        public JsonResult Dictionary_Values(int Test_Id, int Question_Id,int Option_Id)
         {
-            var User_Id = Session["user_id"];
+            Dictionary<int, int> answers = new Dictionary<int, int>();
 
-            foreach (var storeValue in Store_Value)
-                {
-                    var answer = new Answer_Table
-                    {
-                        User_Id = Convert.ToInt32(User_Id),
-                        Tset_Id = storeValue.Tset_Id,
-                        Question_Id = storeValue.Question_Id,
-                        Option_Id = storeValue.Option_Id,
-                       
-                    };
-
-                    db_context.Answer_Table.Add(answer);
-                }
-
-                db_context.SaveChanges();
-
-                return Json(new { success = true, message = "saved successfully!" });
-            
-        }
-
-
-
-        public JsonResult Submit_QuestionOptions(Dictionary<int, int> Save_values)
-        {
-            int user_id = Convert.ToInt32( Session["user_id"]);
-
-            foreach (var Select_Options in Save_values)
+            if (Session["answers"] == null)
             {
-                var Answer = new Answer_Table
-                {
-                    Question_Id = Select_Options.Key,
-                    Option_Id = Select_Options.Key,
-                    User_Id = user_id,
-                    TestAttended_Date = DateTime.Now
-                };
-
-                db_context.Answer_Table.Add(Answer);
+                answers.Add(Question_Id, Option_Id);
+                Session["answers"] = answers;
             }
-            db_context.SaveChanges();
+            else
+            {
+                Dictionary<int, int> Convert_value = (Dictionary<int, int>)Session["answers"];
+                Convert_value.Add(Question_Id,Option_Id);
+
+                Session["answers"] = Convert_value;
+            }
 
             return Json("Success");
         }
