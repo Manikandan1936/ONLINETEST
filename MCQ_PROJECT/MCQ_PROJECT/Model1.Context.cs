@@ -36,6 +36,7 @@ namespace MCQ_PROJECT
         public DbSet<User_Invaite_Table> User_Invaite_Table { get; set; }
         public DbSet<User_Table> User_Table { get; set; }
         public DbSet<Test_Table> Test_Table { get; set; }
+        public DbSet<Answer_Table> Answer_Table { get; set; }
     
         public virtual ObjectResult<Login_Admin_Result> Login_Admin(string user_name, string password)
         {

@@ -277,8 +277,6 @@ $(document).ready(function () {
     }
 
 
-
-
     function fetchQuestions() {
 
         $.ajax({
@@ -292,6 +290,23 @@ $(document).ready(function () {
                 if (questions.length > 0) {
                     displayQuestion(questions[currentIndex]);
                     $('#nextbutton').show();
+
+                    $.ajax({
+                        url: '/USER/Check_Attended_Test',
+                        type: 'GET',
+                        data: { Test_Id: testId },
+                        success: function (response) {
+                            if (response.message) {
+                                $('#nextbutton').hide();
+                                $('#submit_questions').hide();
+                                alert('You have already completed this test.');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed to check test completion.');
+                        }
+                    });
+
 
                     if (!sessionStorage.getItem('timerStarted')) {
                         timerInterval = setInterval(updateTimer, 1000);
@@ -319,7 +334,6 @@ $(document).ready(function () {
         var questionHtml = template(question);
         $('#questionContainer').html(questionHtml);
 
-        // Show/hide the back and next buttons
         $('#backbutton').toggle(currentIndex > 0);
         $('#nextbutton').toggle(currentIndex < questions.length - 1);
         $('#submit_questions').toggle(currentIndex === questions.length - 1);
@@ -354,8 +368,33 @@ $(document).ready(function () {
             currentIndex++;
             displayQuestion(questions[currentIndex]);
         }
+
     });
 
+
+    $('#submit_questions').click(function () {
+
+        var selectedOption = $('input[name="options"]:checked');
+        var selectedOptionId = selectedOption.val();
+        var currentQuestionId = questions[currentIndex].Question_Id;
+
+            $.ajax({
+                url: '/USER/Save_Answer',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Test_Id: testId,
+                    Question_Id: currentQuestionId,
+                    Option_Id: selectedOptionId
+                }),
+                success: function (response) {
+                    alert("Answers submitted successfully!");
+                },
+                error: function () {
+                    alert("Failed to submit answers.");
+                }
+            });
+        });
 
 
     $('#backbutton').click(function () {

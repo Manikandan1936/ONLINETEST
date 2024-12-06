@@ -20,5 +20,6 @@ namespace MCQ_PROJECT
         public Nullable<int> Question_Id { get; set; }
         public Nullable<int> Option_Id { get; set; }
         public Nullable<System.DateTime> TestAttended_Date { get; set; }
+        public Nullable<bool> Attend_Test { get; set; }
     }
 }

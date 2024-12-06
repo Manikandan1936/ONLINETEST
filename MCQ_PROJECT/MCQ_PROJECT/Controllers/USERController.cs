@@ -88,7 +88,6 @@ namespace MCQ_PROJECT.Controllers
         {
             var Email = Session["Email"].ToString();
 
-
             var Get_Email = db_context.After_Login(Email).ToList();
 
             return Json(Get_Email,JsonRequestBehavior.AllowGet);
@@ -137,8 +136,9 @@ namespace MCQ_PROJECT.Controllers
             return Json(questionOptions, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Dictionary_Values(int Test_Id, int Question_Id,int Option_Id)
+        public JsonResult Dictionary_Values( int Question_Id,int Option_Id)
         {
+
             Dictionary<int, int> answers = new Dictionary<int, int>();
 
             if (Session["answers"] == null)
@@ -157,5 +157,64 @@ namespace MCQ_PROJECT.Controllers
             return Json("Success");
         }
 
+
+        public JsonResult Save_Answer(int Test_Id, int Question_Id, int Option_Id)
+        {
+            Dictionary<int, int> Last_Answer = new Dictionary<int, int>();
+
+            if (Session["last_answer"] == null)
+            {
+                Last_Answer.Add(Question_Id, Option_Id);
+                Session["last_answer"] = Last_Answer;
+            }
+
+            var Answers = Session["answers"] as Dictionary<int, int>;
+            var Submit_Answer = Session["last_answer"] as Dictionary<int, int>;
+
+            foreach (var Get_Answer in Answers)
+            {
+                var Ans = new Answer_Table
+                {
+                    Question_Id = Get_Answer.Key,
+                    Option_Id = Get_Answer.Value,
+                    Tset_Id = Test_Id,
+                    User_Id = Convert.ToInt32(Session["user_id"]),
+                    TestAttended_Date = DateTime.Now,
+                    Attend_Test = true
+                };
+                db_context.Answer_Table.Add(Ans);
+            }
+
+            foreach (var Final_Answer in Submit_Answer)
+            {
+                var Save = new Answer_Table
+                {
+                    Question_Id = Final_Answer.Key,
+                    Option_Id = Final_Answer.Value,
+                    Tset_Id = Test_Id,
+                    User_Id = Convert.ToInt32(Session["user_id"]),
+                    TestAttended_Date = DateTime.Now,
+                    Attend_Test = true
+                };
+                db_context.Answer_Table.Add(Save);
+            }
+
+            db_context.SaveChanges();
+            return Json("success");
+        }
+
+        public JsonResult Check_Attended_Test(int Test_id)
+        {
+            int User_Id = (int)Session["user_id"];
+
+            var Allready_Attended = db_context.Answer_Table.Any(a => a.User_Id == User_Id && a.Tset_Id == Test_id && a.Attend_Test == true);
+
+            if (Allready_Attended)
+            {
+                return Json(new { status = "attended", message = "You have already attended this test." });
+            }
+
+            return Json("Success");
+        }
     }
 }
