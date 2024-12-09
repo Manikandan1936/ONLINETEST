@@ -35,8 +35,8 @@ namespace MCQ_PROJECT
         public DbSet<Test_Maping> Test_Maping { get; set; }
         public DbSet<User_Invaite_Table> User_Invaite_Table { get; set; }
         public DbSet<User_Table> User_Table { get; set; }
-        public DbSet<Test_Table> Test_Table { get; set; }
         public DbSet<Answer_Table> Answer_Table { get; set; }
+        public DbSet<Test_Table> Test_Table { get; set; }
     
         public virtual ObjectResult<Login_Admin_Result> Login_Admin(string user_name, string password)
         {
@@ -184,6 +184,15 @@ namespace MCQ_PROJECT
                 new ObjectParameter("test_id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Question_Id_Mapping1", test_idParameter);
+        }
+    
+        public virtual ObjectResult<After_Login_Email_Result> After_Login_Email(string user_email)
+        {
+            var user_emailParameter = user_email != null ?
+                new ObjectParameter("user_email", user_email) :
+                new ObjectParameter("user_email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Email_Result>("After_Login_Email", user_emailParameter);
         }
     }
 }

@@ -208,6 +208,22 @@ $(document).ready(function () {
                     }, "autowidth": true
                 },
 
+    {
+        "data": "Status",
+        "render": function (data, type, row) {
+            // Check the value of Status and return a user-friendly label
+            if (data === 1) {
+                return '<span class="badge bg-success">Attended</span>';
+            } else if (data === 0) {
+                return '<span class="badge bg-danger">Not Attended</span>';
+            } else {
+                return '<span class="badge bg-secondary">Unknown</span>'; // Fallback for unexpected values
+            }
+        },
+        "autowidth": true
+    },
+
+
                 {
                     mRender: function (data, type, row) {
 
@@ -230,7 +246,7 @@ function Test_Id(test_id,duration) {
     sessionStorage.setItem("Test_Id", test_id)
     sessionStorage.setItem("Test_Duration", duration);
 
-    window.location.href = "/USER/Questions_Options_Page?Test_Id=" + test_id;
+    window.location.href = "/USER/Instruction_Page?Test_Id=" + test_id;
 }
 
 
@@ -246,7 +262,7 @@ $(document).ready(function () {
     var userResponses = {};
 
     var timeParts = duration.split(':').map(Number);
-    var hours = timeParts[0]; 
+    var hours = timeParts[0];
     var minutes = timeParts[1];
     var totalTime = (hours * 60 + minutes) * 60;
 
@@ -259,16 +275,16 @@ $(document).ready(function () {
         var sec = seconds % 60;
         return minutes.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
     }
-    
+
     function updateTimer() {
         if (remainingTime <= 0) {
-           
+
             clearInterval(timerInterval); // Stop the timer
             alert('Time is up! The test has been completed.');
             $('#nextbutton, #backbutton').prop('disabled', true); // Disable buttons
-            sessionStorage.removeItem('remainingTime'); 
-            
-            
+            sessionStorage.removeItem('remainingTime');
+
+
         } else {
             remainingTime--;
             sessionStorage.setItem('remainingTime', remainingTime);
@@ -282,7 +298,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/USER/Show_QuestionOptions',
             type: 'GET',
-            data: { Test_Id: testId},
+            data: { Test_Id: testId },
             dataType: 'json',
             success: function (result) {
                 questions = result;
@@ -291,32 +307,17 @@ $(document).ready(function () {
                     displayQuestion(questions[currentIndex]);
                     $('#nextbutton').show();
 
-                    $.ajax({
-                        url: '/USER/Check_Attended_Test',
-                        type: 'GET',
-                        data: { Test_Id: testId },
-                        success: function (response) {
-                            if (response.message) {
-                                $('#nextbutton').hide();
-                                $('#submit_questions').hide();
-                                alert('You have already completed this test.');
-                            }
-                        },
-                        error: function () {
-                            alert('Failed to check test completion.');
-                        }
-                    });
-
 
                     if (!sessionStorage.getItem('timerStarted')) {
                         timerInterval = setInterval(updateTimer, 1000);
                         sessionStorage.setItem('timerStarted', true);
+
                     }
                 } else {
                     alert('No questions available.');
                 }
 
-                
+
             },
             error: function () {
                 alert('Failed to load questions.');
@@ -325,10 +326,10 @@ $(document).ready(function () {
     }
 
     function displayQuestion(question) {
-   
+
         var templateSource = $('#Question_Template').html();
         var template = Handlebars.compile(templateSource);
-        
+
         question.index = currentIndex + 1;
 
         var questionHtml = template(question);
@@ -337,7 +338,7 @@ $(document).ready(function () {
         $('#backbutton').toggle(currentIndex > 0);
         $('#nextbutton').toggle(currentIndex < questions.length - 1);
         $('#submit_questions').toggle(currentIndex === questions.length - 1);
-            
+
     }
 
     $('#nextbutton').click(function () {
@@ -360,7 +361,7 @@ $(document).ready(function () {
                 },
                 error: function () {
                     alert("Failed to save response.");
-                }   
+                }
             });
         }
 
@@ -378,23 +379,43 @@ $(document).ready(function () {
         var selectedOptionId = selectedOption.val();
         var currentQuestionId = questions[currentIndex].Question_Id;
 
-            $.ajax({
-                url: '/USER/Save_Answer',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    Test_Id: testId,
-                    Question_Id: currentQuestionId,
-                    Option_Id: selectedOptionId
-                }),
-                success: function (response) {
-                    alert("Answers submitted successfully!");
-                },
-                error: function () {
-                    alert("Failed to submit answers.");
-                }
-            });
+        $.ajax({
+            url: '/USER/Save_Answer',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                Test_Id: testId,
+                Question_Id: currentQuestionId,
+                Option_Id: selectedOptionId
+            }),
+            success: function (response) {
+                alert("Answers submitted successfully!");
+
+                $.ajax({
+                    url: '/USER/UpdateTestStatus',
+                    type: 'POST',
+                    data: { testId: testId },
+                    success: function (statusResponse) {
+                        if (statusResponse.success) {
+                            alert(statusResponse.message);
+                        } else {
+                            alert("Failed to update test status.");
+                        }
+                    },
+                    error: function () {
+                        alert("Error while updating test status.");
+                    }
+                })
+
+
+
+
+            },
+            error: function () {
+                alert("Failed to submit answers.");
+            }
         });
+    });
 
 
     $('#backbutton').click(function () {

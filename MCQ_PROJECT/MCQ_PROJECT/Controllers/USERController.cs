@@ -160,6 +160,8 @@ namespace MCQ_PROJECT.Controllers
 
         public JsonResult Save_Answer(int Test_Id, int Question_Id, int Option_Id)
         {
+             
+
             Dictionary<int, int> Last_Answer = new Dictionary<int, int>();
 
             if (Session["last_answer"] == null)
@@ -203,18 +205,23 @@ namespace MCQ_PROJECT.Controllers
             return Json("success");
         }
 
-        public JsonResult Check_Attended_Test(int Test_id)
+      
+        public JsonResult UpdateTestStatus(int testId)
         {
-            int User_Id = (int)Session["user_id"];
+           
+                // Find the test record by Test_Id
+            var test = db_context.Test_Table.SingleOrDefault(t => t.Test_Id == testId);
 
-            var Allready_Attended = db_context.Answer_Table.Any(a => a.User_Id == User_Id && a.Tset_Id == Test_id && a.Attend_Test == true);
+                if (test != null)
+                {
+                    test.Status = true; 
+                    db_context.SaveChanges();
+                    return Json(new { success = true, message = "Test status updated successfully." });
+                }
 
-            if (Allready_Attended)
-            {
-                return Json(new { status = "attended", message = "You have already attended this test." });
+                return Json(new { success = false, message = "Test not found." });
             }
+        
 
-            return Json("Success");
-        }
     }
 }

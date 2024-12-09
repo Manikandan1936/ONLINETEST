@@ -10,16 +10,14 @@
 namespace MCQ_PROJECT
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Test_Table
+    public partial class After_Login_Email_Result
     {
         public int Test_Id { get; set; }
-        public string Test_Name { get; set; }
         public Nullable<System.DateTime> Created_Date { get; set; }
         public Nullable<System.DateTime> Start_Date { get; set; }
         public Nullable<System.DateTime> End_Date { get; set; }
         public Nullable<System.TimeSpan> Duration { get; set; }
-        public Nullable<bool> Status { get; set; }
+        public string Status { get; set; }
     }
 }
