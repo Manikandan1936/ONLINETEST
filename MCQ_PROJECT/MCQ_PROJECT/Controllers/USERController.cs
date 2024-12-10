@@ -88,7 +88,8 @@ namespace MCQ_PROJECT.Controllers
         {
             var Email = Session["Email"].ToString();
 
-            var Get_Email = db_context.After_Login(Email).ToList();
+            var Get_Email = db_context.After_Login_Attended(Email).ToList();
+
 
             return Json(Get_Email,JsonRequestBehavior.AllowGet);
         }

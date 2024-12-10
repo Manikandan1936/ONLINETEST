@@ -114,13 +114,13 @@ namespace MCQ_PROJECT
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("User_Email", user_EmailParameter);
         }
     
-        public virtual ObjectResult<After_Login_Result> After_Login(string user_email)
+        public virtual int After_Login(string user_email)
         {
             var user_emailParameter = user_email != null ?
                 new ObjectParameter("user_email", user_email) :
                 new ObjectParameter("user_email", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Result>("After_Login", user_emailParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("After_Login", user_emailParameter);
         }
     
         public virtual int Show_Options(Nullable<int> question_id)
@@ -186,13 +186,31 @@ namespace MCQ_PROJECT
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("Question_Id_Mapping1", test_idParameter);
         }
     
-        public virtual ObjectResult<After_Login_Email_Result> After_Login_Email(string user_email)
+        public virtual int After_Login_Email(string user_email)
         {
             var user_emailParameter = user_email != null ?
                 new ObjectParameter("user_email", user_email) :
                 new ObjectParameter("user_email", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Email_Result>("After_Login_Email", user_emailParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("After_Login_Email", user_emailParameter);
+        }
+    
+        public virtual ObjectResult<After_Login_Attended_Result> After_Login_Attended(string user_email)
+        {
+            var user_emailParameter = user_email != null ?
+                new ObjectParameter("user_email", user_email) :
+                new ObjectParameter("user_email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Attended_Result>("After_Login_Attended", user_emailParameter);
+        }
+    
+        public virtual ObjectResult<Test_Attend_Result> Test_Attend(string user_email)
+        {
+            var user_emailParameter = user_email != null ?
+                new ObjectParameter("user_email", user_email) :
+                new ObjectParameter("user_email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test_Attend_Result>("Test_Attend", user_emailParameter);
         }
     }
 }

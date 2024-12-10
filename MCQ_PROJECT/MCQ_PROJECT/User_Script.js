@@ -159,7 +159,6 @@ $(document).ready(function () {
 // after login
 
 $(document).ready(function () {
-    
 
     $("#Email_Table").DataTable({
 
@@ -207,21 +206,19 @@ $(document).ready(function () {
                         return data.Hours + ":" + data.Minutes;
                     }, "autowidth": true
                 },
-
-    {
-        "data": "Status",
-        "render": function (data, type, row) {
-            // Check the value of Status and return a user-friendly label
-            if (data === 1) {
-                return '<span class="badge bg-success">Attended</span>';
-            } else if (data === 0) {
-                return '<span class="badge bg-danger">Not Attended</span>';
-            } else {
-                return '<span class="badge bg-secondary">Unknown</span>'; // Fallback for unexpected values
-            }
-        },
-        "autowidth": true
+{
+    data: "Status",
+    render: function (data) {
+        if (data === true) {
+            return '<span class="badge bg-success">Test Attended</span>';
+        } else if (data === false) {
+            return '<span class="badge bg-danger">Test Not Attended</span>';
+        } else {
+            return '<span class="badge bg-secondary">Unknown</span>';
+        }
     },
+    autoWidth: true
+},
 
 
                 {
@@ -372,7 +369,6 @@ $(document).ready(function () {
 
     });
 
-
     $('#submit_questions').click(function () {
 
         var selectedOption = $('input[name="options"]:checked');
@@ -394,6 +390,7 @@ $(document).ready(function () {
                 $.ajax({
                     url: '/USER/UpdateTestStatus',
                     type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                     data: { testId: testId },
                     success: function (statusResponse) {
                         if (statusResponse.success) {
@@ -406,9 +403,6 @@ $(document).ready(function () {
                         alert("Error while updating test status.");
                     }
                 })
-
-
-
 
             },
             error: function () {
