@@ -206,25 +206,30 @@ $(document).ready(function () {
                         return data.Hours + ":" + data.Minutes;
                     }, "autowidth": true
                 },
-{
-    data: "Status",
-    render: function (data) {
-        if (data === true) {
-            return '<span class="badge bg-success">Test Attended</span>';
-        } else if (data === false) {
-            return '<span class="badge bg-danger">Test Not Attended</span>';
-        } else {
-            return '<span class="badge bg-secondary">Unknown</span>';
-        }
-    },
-    autoWidth: true
-},
+   {
+       data: "Status",
+       render: function (data) {
+           if (data === true) {
+               return '<span class="badge bg-success">Test Attended</span>';
+           } else {
+               return '<span class="badge bg-danger">Test Not Attended</span>';
+           }
+       },
+       autoWidth: true,
+   },
 
-
+   
                 {
                     mRender: function (data, type, row) {
 
-                        return '<a onclick="Test_Id(' + row.Test_Id + ', \'' + row.Duration.Hours + ':' + row.Duration.Minutes + '\')" class="btn btn-success">TAKE TEST</a>';
+                        if (row.Status === true) {
+                            return '<button class=\'btn btn-secondary\' disabled>Already Attended</button>';
+                        }
+                        else {
+
+
+                            return '<a onclick="Test_Id(' + row.Test_Id + ', \'' + row.Duration.Hours + ':' + row.Duration.Minutes + '\')" class="btn btn-success">TAKE TEST</a>';
+                        }
                     }
                 },
 
@@ -425,5 +430,43 @@ $(document).ready(function () {
 });
 
 
-// save questions and options
+// view results
 
+$(document).ready(function () {
+   
+    $("#View_Test_Table").DataTable({
+
+        "destroy": true,
+        "pagingtype": "full_numbers",
+        "ordering": false,
+
+        ajax: {
+            type: "GET",
+            url: "/USER/View_Marks",
+            contentType: "application/json",
+
+
+            data: function (d) {
+
+                alert(JSON.stringify(d));
+                return JSON.stringify(d);
+            },
+
+            error: function (xhr, err) {
+                alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                alert("responseText: " + xhr.responseText);
+            },
+        },
+
+        columns :[
+
+            { "data": "Name" , "autowidth" : true},
+            { "data": "Email_Id", "autowidth": true },
+            { "data": "Test_Name", "autowidth" : true },
+            { "data": "Total_Answer" , "autowidth" : true },
+            { "data": "Correct_Answer", "autowidth": true },
+            { "data": "Percentage" , "autowidth" : true }
+
+        ]
+    })
+})
