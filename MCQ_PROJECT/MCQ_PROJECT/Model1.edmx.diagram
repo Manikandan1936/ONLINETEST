@@ -12,8 +12,8 @@
         <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Maping" Width="1.5" PointX="9.25" PointY="1" />
         <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.User_Invaite_Table" Width="1.5" PointX="2.25" PointY="3" />
         <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.User_Table" Width="1.5" PointX="0.5" PointY="4.75" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Table" Width="1.5" PointX="7.5" PointY="1" />
-        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Answer_Table" Width="1.5" PointX="4.125" PointY="4.75" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Answer_Table" Width="1.5" PointX="4" PointY="4.625" />
+        <EntityTypeShape EntityType="Mutlipel_Choice_QuestionModel.Test_Table" Width="1.5" PointX="7.5" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

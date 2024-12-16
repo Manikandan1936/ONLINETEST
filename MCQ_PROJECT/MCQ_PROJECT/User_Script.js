@@ -218,7 +218,15 @@ $(document).ready(function () {
        autoWidth: true,
    },
 
-   
+
+           {
+               "data": "Percentage",
+               "render": function (data) {
+                   return data.toFixed(0) + " %";
+               },
+               "autoWidth": true
+           },
+
                 {
                     mRender: function (data, type, row) {
 
@@ -226,7 +234,6 @@ $(document).ready(function () {
                             return '<button class=\'btn btn-secondary\' disabled>Already Attended</button>';
                         }
                         else {
-
 
                             return '<a onclick="Test_Id(' + row.Test_Id + ', \'' + row.Duration.Hours + ':' + row.Duration.Minutes + '\')" class="btn btn-success">TAKE TEST</a>';
                         }
@@ -238,6 +245,8 @@ $(document).ready(function () {
     });
 
 });
+
+
 
 // get the testid and duration in session storage
 
@@ -445,12 +454,7 @@ $(document).ready(function () {
             url: "/USER/View_Marks",
             contentType: "application/json",
 
-
-            data: function (d) {
-
-                alert(JSON.stringify(d));
-                return JSON.stringify(d);
-            },
+            dataSrc: "data",
 
             error: function (xhr, err) {
                 alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
@@ -465,8 +469,13 @@ $(document).ready(function () {
             { "data": "Test_Name", "autowidth" : true },
             { "data": "Total_Answer" , "autowidth" : true },
             { "data": "Correct_Answer", "autowidth": true },
-            { "data": "Percentage" , "autowidth" : true }
-
+             {
+                 "data": "Percentage",
+                 "autoWidth": true,
+                 "render": function (data, type, row) {
+                     return data ? data.toFixed(0) + "%" : "0%";
+                 }
+             }
         ]
     })
 })

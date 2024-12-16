@@ -204,13 +204,36 @@ namespace MCQ_PROJECT
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<After_Login_Attended_Result>("After_Login_Attended", user_emailParameter);
         }
     
-        public virtual ObjectResult<Test_Attend_Result> Test_Attend(string user_email)
+        public virtual int Test_Attend(string user_email)
         {
             var user_emailParameter = user_email != null ?
                 new ObjectParameter("user_email", user_email) :
                 new ObjectParameter("user_email", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test_Attend_Result>("Test_Attend", user_emailParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_Attend", user_emailParameter);
+        }
+    
+        public virtual ObjectResult<Test_Attend1_Result> Test_Attend1(string user_email)
+        {
+            var user_emailParameter = user_email != null ?
+                new ObjectParameter("user_email", user_email) :
+                new ObjectParameter("user_email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test_Attend1_Result>("Test_Attend1", user_emailParameter);
+        }
+    
+        public virtual ObjectResult<Test_Result_Result> Test_Result()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test_Result_Result>("Test_Result");
+        }
+    
+        public virtual ObjectResult<User_Attended_Test_Result> User_Attended_Test(string user_Email)
+        {
+            var user_EmailParameter = user_Email != null ?
+                new ObjectParameter("User_Email", user_Email) :
+                new ObjectParameter("User_Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<User_Attended_Test_Result>("User_Attended_Test", user_EmailParameter);
         }
     }
 }
